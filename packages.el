@@ -28,21 +28,19 @@
   :ensure t
   :bind (("C-x C-b" . helm-mini)
          ("M-x" . helm-M-x)
-         ("M-S-x" . execute-extended-command)))
+         ("M-S-x" . execute-extended-command))
+  :config
+  (progn
+    (bind-key "C-i" 'helm-execute-persistent-action helm-map)))
 
 (use-package helm-git-grep
   :ensure t
   :bind ("C-x C-g" . helm-git-grep))
 
-(use-package helm-projectile
-  :ensure t
-  :bind ("C-x C-d" . helm-projectile))
-
 ;; Markdown
 (use-package markdown-mode
   :ensure t
   :mode "\\.md")
-
 
 ;; js2-mode
 (defun js2-insert-this ()
@@ -56,7 +54,7 @@
 
 (use-package js2-mode
   :ensure t
-  :mode "\\.js$"
+  :mode "\\.js"
   :config
   (progn
     (setq js2-bounce-indent-p t
@@ -72,7 +70,23 @@
                 (push '("function" . ?ƒ) prettify-symbols-alist)
                 (push '("this" . ?@) prettify-symbols-alist)
                 (push '(">=" . ?≥) prettify-symbols-alist)
-                (push '("<=" . ?≤) prettify-symbols-alist)))))
+                (push '("<=" . ?≤) prettify-symbols-alist)))
+
+    (add-hook 'js2-mode-hook 'tern-mode)))
+
+;; Tern
+(use-package tern
+  :ensure t
+  :init (autoload 'tern-mode "tern" nil t)
+  :config (setq-default tern-command "/usr/local/bin/tern"))
+
+(use-package company-tern
+  :ensure t)
+
+;; nodejs-repl
+(use-package nodejs-repl
+  :ensure t
+  :bind ("C-x C-n" . nodejs-repl))
 
 ;; Coffee
 (use-package coffee-mode
@@ -84,7 +98,28 @@
   :ensure t
   :init (global-flycheck-mode))
 
+;; Neotree
+(use-package neotree
+  :ensure t
+  :init
+  (progn
+    (use-package find-file-in-project
+      :ensure t)
+
+    (defun neotree-project-dir ()
+      "Open NeoTree using the git root."
+      (interactive)
+      (let ((project-dir (ffip-project-root))
+            (file-name (buffer-file-name)))
+        (if project-dir
+            (progn
+              (neotree-dir project-dir)
+              (neotree-find file-name)
+              (other-window 1))
+          (message "Could not find git project root."))))
+
+    (bind-key "C-c C-p" 'neotree-project-dir)))
+
 ;; emacs-lisp-mode
 (bind-key "M-." 'imenu emacs-lisp-mode-map)
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
-

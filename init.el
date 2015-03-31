@@ -10,6 +10,10 @@
 ;; y-or-no-p
 (defalias 'yes-or-no-p 'y-or-n-p)
 
+
+(setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
+(setq exec-path (append exec-path '("/usr/local/bin")))
+
 ;; Set tabs to 4 spaces
 (setq-default indent-tabs-mode nil)
 (setq standard-indent 4)
