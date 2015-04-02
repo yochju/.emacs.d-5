@@ -77,8 +77,7 @@
 ;; Tern
 (use-package tern
   :ensure t
-  :init (autoload 'tern-mode "tern" nil t)
-  :config (setq-default tern-command "/usr/local/bin/tern"))
+  :init (autoload 'tern-mode "tern" nil t))
 
 (use-package company-tern
   :ensure t)

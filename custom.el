@@ -22,6 +22,7 @@
  '(mouse-wheel-scroll-amount (quote (1 ((shift) . 1) ((control)))))
  '(neo-smart-open t)
  '(neo-theme (quote arrow))
+ '(neo-window-width 30)
  '(ns-pop-up-frames nil)
  '(ns-right-alternate-modifier (quote none))
  '(ns-use-native-fullscreen nil)
