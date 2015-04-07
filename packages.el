@@ -54,7 +54,7 @@
 
 (use-package js2-mode
   :ensure t
-  :mode "\\.js"
+  :mode "\\.js$"
   :config
   (progn
     (setq js2-bounce-indent-p t
@@ -89,13 +89,25 @@
 
 ;; Coffee
 (use-package coffee-mode
-  :ensure t
-  :mode "\\.coffee")
+  :ensure t)
+
+;; Yaml
+(use-package yaml-mode
+  :ensure t)
+
+;; Sass
+(use-package sass-mode
+  :ensure t)
 
 ;; Flycheck
-(use-package flycheck
+;; (use-package flycheck
+;;   :ensure t
+;;   :init (global-flycheck-mode))
+
+;; nodejs-repl
+(use-package dash-at-point
   :ensure t
-  :init (global-flycheck-mode))
+  :bind ("C-c C-d" . dash-at-point))
 
 ;; Neotree
 (use-package neotree
