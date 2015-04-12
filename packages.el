@@ -87,8 +87,13 @@
   :ensure t
   :bind ("C-x C-n" . nodejs-repl))
 
-;; Coffee
 (use-package coffee-mode
+  :ensure t
+  :config (progn
+            (add-hook 'coffee-mode-hook 'tern-mode)
+            (add-hook 'coffee-mode-hook 'highlight-symbol-mode)))
+
+(use-package highlight-symbol
   :ensure t)
 
 ;; Yaml
@@ -100,14 +105,19 @@
   :ensure t)
 
 ;; Flycheck
-;; (use-package flycheck
-;;   :ensure t
-;;   :init (global-flycheck-mode))
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
 
 ;; nodejs-repl
 (use-package dash-at-point
   :ensure t
   :bind ("C-c C-d" . dash-at-point))
+
+;; highlight-symbol
+;; (use-package highlight-symbol
+;;   :ensure t
+;;   :init (highlight-symbol-mode))
 
 ;; Neotree
 (use-package neotree

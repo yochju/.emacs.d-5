@@ -1,0 +1,10 @@
+{
+  "max_line_length": {
+      "level": "ignore"
+  },
+
+  "undefined_variables": {
+      "module": "coffeelint-undefined-variables",
+      "level": "error"
+  }
+}
