@@ -27,11 +27,8 @@
 (use-package helm
   :ensure t
   :bind (("C-x C-b" . helm-mini)
-         ("M-x" . helm-M-x)
-         ("M-S-x" . execute-extended-command))
-  :config
-  (progn
-    (bind-key "C-i" 'helm-execute-persistent-action helm-map)))
+         ("M-x" . helm-M-x))
+  :config (bind-key "C-i" 'helm-execute-persistent-action helm-map))
 
 (use-package helm-git-grep
   :ensure t
@@ -119,27 +116,11 @@
   :ensure t
   :bind ("C-c C-d" . dash-at-point))
 
-;; Neotree
-(use-package neotree
+;; project-explorer
+(use-package project-explorer
   :ensure t
-  :init
-  (progn
-    (use-package find-file-in-project
-      :ensure t)
-
-    (defun neotree-project-dir ()
-      "Open NeoTree using the git root."
-      (interactive)
-      (let ((project-dir (ffip-project-root))
-            (file-name (buffer-file-name)))
-        (if project-dir
-            (progn
-              (neotree-dir project-dir)
-              (neotree-find file-name)
-              (other-window 1))
-          (message "Could not find git project root."))))
-
-    (bind-key "C-c C-p" 'neotree-project-dir)))
+  :bind (("C-c C-p" . project-explorer-open)
+         ("C-x p" . project-explorer-helm)))
 
 ;; emacs-lisp-mode
 (bind-key "M-." 'imenu emacs-lisp-mode-map)
