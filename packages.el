@@ -109,15 +109,15 @@
   :ensure t
   :init (global-flycheck-mode))
 
+;; Flyspell
+(use-package flyspell
+  :init (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+  :bind ([down-mouse-3] . flyspell-correct-word))
+
 ;; nodejs-repl
 (use-package dash-at-point
   :ensure t
   :bind ("C-c C-d" . dash-at-point))
-
-;; highlight-symbol
-;; (use-package highlight-symbol
-;;   :ensure t
-;;   :init (highlight-symbol-mode))
 
 ;; Neotree
 (use-package neotree
