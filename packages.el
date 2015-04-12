@@ -120,7 +120,7 @@
 (use-package project-explorer
   :ensure t
   :bind (("C-c C-p" . project-explorer-open)
-         ("C-x p" . project-explorer-helm)))
+         ("C-c C-h" . project-explorer-helm)))
 
 ;; emacs-lisp-mode
 (bind-key "M-." 'imenu emacs-lisp-mode-map)
