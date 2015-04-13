@@ -5,6 +5,13 @@
 
   "undefined_variables": {
       "module": "coffeelint-undefined-variables",
-      "level": "error"
+      "level": "error",
+      "environments": {
+          "browser": true,
+          "node": true,
+          "typed": true,
+          "jquery": true
+      },
+      "globals": [ "angular", "mycs", "describe", "it" ]
   }
 }
