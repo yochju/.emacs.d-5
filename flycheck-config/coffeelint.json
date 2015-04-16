@@ -9,9 +9,10 @@
       "environments": {
           "browser": true,
           "node": true,
+          "devel": true,
           "typed": true,
           "jquery": true
       },
-      "globals": [ "angular", "mycs", "describe", "it" ]
+      "globals": [ "_", "angular", "describe", "it" ]
   }
 }

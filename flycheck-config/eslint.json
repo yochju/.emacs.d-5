@@ -1,5 +1,18 @@
 {
+    "env": {
+        "browser": true,
+        "node": true,
+        "jasmine": true,
+        "mocha": true,
+        "jquery": true
+    },
+
     "rules": {
         "quotes": 0
+    },
+
+    "globals": {
+        "_": true,
+        "angular": true
     }
 }

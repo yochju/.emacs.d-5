@@ -111,17 +111,11 @@
   :init (add-hook 'prog-mode-hook 'flyspell-prog-mode)
   :bind ([down-mouse-3] . flyspell-correct-word))
 
-;; nodejs-repl
-(use-package dash-at-point
-  :ensure t
-  :bind ("C-c C-d" . dash-at-point))
-
 ;; project-explorer
 (use-package project-explorer
   :ensure t
   :bind (("C-c C-p" . project-explorer-open)
-         ("C-c C-h" . project-explorer-helm)))
+         ("C-x C-d" . project-explorer-helm)))
 
 ;; emacs-lisp-mode
-(bind-key "M-." 'imenu emacs-lisp-mode-map)
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)

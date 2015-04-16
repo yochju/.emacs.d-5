@@ -3,41 +3,45 @@
 (global-set-key (kbd "C-c C-/") 'comment-region)
 (global-set-key (kbd "C-c C-\\") 'uncomment-region)
 
-;; Toggle fullscreen
-(global-set-key
- (kbd "C-c f")
- (lambda ()
-   (interactive)
-   (if (eq 'fullboth (frame-parameter nil 'fullscreen))
-       (set-fringe-mode '(8 . 8))
-     (run-with-timer
-      0.7 nil
-      (lambda ()
-        (set-fringe-mode
-         (/ (- (frame-pixel-width)
-               (* 120 (frame-char-width)))
-            2)))))
-   (toggle-frame-fullscreen)))
+
+;; Jump to definition of symbol at point
+(defun jump-to-definition ()
+  (interactive)
+  (imenu (symbol-at-point)))
+
+(bind-key "M-." 'jump-to-definition)
 
 
-(global-set-key
- (kbd "M-w")
- (lambda ()
-   (interactive)
-   (if (region-active-p)
-     (kill-ring-save (region-beginning) (region-end) t)
-     (let ((start (line-beginning-position))
-           (end (line-end-position)))
-       (let ((overlay (make-overlay start end)))
-         (overlay-put overlay 'face 'region)
-         (run-with-timer 0.2 nil 'delete-overlay overlay))
-       (kill-ring-save start end)))))
+;; Toggle full screen mode
+(defun toggle-distraction-free ()
+  (interactive)
+  (if (eq 'fullboth (frame-parameter nil 'fullscreen))
+      (set-fringe-mode '(8 . 8))
+    (run-with-timer
+     0.7 nil
+     (lambda ()
+       (set-fringe-mode
+        (/ (- (frame-pixel-width)
+              (* 120 (frame-char-width)))
+           2)))))
+  (toggle-frame-fullscreen))
 
-(global-set-key
- (kbd "C-w")
- (lambda ()
-   (interactive)
-   (if (region-active-p)
-     (kill-region (region-beginning) (region-end) t)
-     (kill-whole-line))))
+(bind-key "C-c f" 'toggle-frame-fullscreen)
 
+
+;; Kill/copy region or line
+(defun copy-region-or-line ()
+  (interactive)
+  (unless (region-active-p)
+    (set-mark-command (beginning-of-line))
+    (move-end-of-line nil))
+  (kill-ring-save (region-beginning) (region-end) t))
+
+(defun kill-region-or-line ()
+  (interactive)
+  (if (region-active-p)
+      (kill-region (region-beginning) (region-end) t)
+    (kill-whole-line)))
+
+(bind-key "M-w" 'copy-region-or-line)
+(bind-key "C-w" 'kill-region-or-line)
