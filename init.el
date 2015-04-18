@@ -38,9 +38,13 @@
 ;; Save desktop
 (desktop-save-mode)
 
+;; Prettify programming languages keywords
 (global-prettify-symbols-mode)
 
+;; Load packages
 (load "~/.emacs.d/packages.el")
+
+;; Keybindings
 (load "~/.emacs.d/keybindings.el")
 
 (server-start)

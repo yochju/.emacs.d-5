@@ -26,7 +26,7 @@
            2)))))
   (toggle-frame-fullscreen))
 
-(bind-key "C-c f" 'toggle-frame-fullscreen)
+(bind-key "C-c f" 'toggle-distraction-free)
 
 
 ;; Kill/copy region or line
@@ -45,3 +45,12 @@
 
 (bind-key "M-w" 'copy-region-or-line)
 (bind-key "C-w" 'kill-region-or-line)
+
+
+(defun backward-delete-word (arg)
+  "Delete characters backward until encountering the beginning of a word.
+With argument ARG, do this that many times."
+  (interactive "p")
+  (delete-region (point) (progn (backward-word arg) (point))))
+
+(bind-key "M-<backspace>" 'backward-delete-word minibuffer-local-map)

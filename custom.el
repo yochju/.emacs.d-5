@@ -41,10 +41,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:height 140 :family "Menlo"))))
+ '(default ((t (:height 150 :family "Menlo"))))
  '(cursor ((t (:background "red"))))
- '(helm-source-header ((t (:background "gray35" :foreground "white" :weight bold :height 1.1 :family "Sans Serif"))))
  '(highlight-symbol-face ((t (:underline t))))
- '(hl-line ((t (:background "selectedKnobColor"))))
- '(pe/directory-face ((t (:inherit dired-directory :height 120))))
+ '(hl-line ((t (:background "selectedKxnobColor"))))
+ '(pe/directory-face ((t (:inherit dired-directory :height 140))))
  '(pe/file-face ((t (:inherit default :height 140)))))
