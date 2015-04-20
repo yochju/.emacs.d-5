@@ -1,7 +1,13 @@
 ;;; Various keybindings
 (global-set-key (kbd "C--") 'undo)
+
 (global-set-key (kbd "C-c C-/") 'comment-region)
+
 (global-set-key (kbd "C-c C-\\") 'uncomment-region)
+
+(global-set-key (kbd "C-x C-j") 'json-pretty-print-buffer)
+
+(global-set-key (kbd "C-c C-f") 'find-file-at-point)
 
 
 ;; Jump to definition of symbol at point

@@ -6,6 +6,7 @@
  '(blink-cursor-mode nil)
  '(coffee-args-compile (quote ("-c" "--bare")))
  '(coffee-tab-width 2)
+ '(column-number-mode t)
  '(company-backends
    (quote
     (company-tern company-nxml company-css company-capf company-dabbrev-code company-abbrev)))
@@ -36,6 +37,7 @@
  '(scroll-step 5)
  '(sgml-basic-offset 2)
  '(show-paren-mode t)
+ '(sml/theme (quote respectful))
  '(tool-bar-mode nil)
  '(visible-bell t))
 (custom-set-faces

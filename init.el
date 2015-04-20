@@ -41,6 +41,9 @@
 ;; Prettify programming languages keywords
 (global-prettify-symbols-mode)
 
+;; Display column number
+(column-number-mode t)
+
 ;; Load packages
 (load "~/.emacs.d/packages.el")
 

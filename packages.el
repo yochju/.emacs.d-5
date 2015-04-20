@@ -32,7 +32,7 @@
 
 (use-package helm-git-grep
   :ensure t
-  :bind ("C-x C-g" . helm-git-grep))
+  :bind ("C-x C-p" . helm-git-grep))
 
 ;; Markdown
 (use-package markdown-mode
@@ -111,16 +111,40 @@
   :init (add-hook 'prog-mode-hook 'flyspell-prog-mode)
   :bind ([down-mouse-3] . flyspell-correct-word))
 
+
 ;; project-explorer
+(defvar pe/update-timer nil)
+
+(defun pe/update-other-window ()
+  (when (pe/get-current-project-explorer-buffer)
+    (let ((win (selected-window)))
+      (project-explorer-open)
+      (select-window win))))
+
+(defun pe/update ()
+  (interactive)
+  (when pe/update-timer (cancel-timer pe/update-timer))
+  (setq pe/update-timer (run-with-timer 0.1 nil #'pe/update-other-window)))
+
 (use-package project-explorer
   :ensure t
   :bind (("C-c C-p" . project-explorer-open)
-         ("C-x C-d" . project-explorer-helm)))
+         ("C-x C-d" . project-explorer-helm))
+  :config (add-hook 'post-command-hook #'pe/update))
 
 ;; Highlight active window
 (use-package hiwin
   :ensure t
   :config (hiwin-mode t))
+
+;; Smart mode line
+(use-package smart-mode-line
+  :ensure t
+  :config (smart-mode-line-enable))
+
+(use-package sml-modeline
+  :ensure t
+  :config (sml-modeline-mode t))
 
 ;; emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
