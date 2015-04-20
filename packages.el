@@ -117,5 +117,10 @@
   :bind (("C-c C-p" . project-explorer-open)
          ("C-x C-d" . project-explorer-helm)))
 
+;; Highlight active window
+(use-package hiwin
+  :ensure t
+  :config (hiwin-mode t))
+
 ;; emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)

@@ -20,6 +20,7 @@
  '(fringe-mode (quote (nil . 0)) nil (fringe))
  '(global-hl-line-mode t)
  '(global-whitespace-mode t)
+ '(helm-split-window-in-side-p t)
  '(highlight-symbol-foreground-color nil)
  '(highlight-symbol-idle-delay 0.1)
  '(mouse-wheel-progressive-speed nil)
@@ -35,7 +36,8 @@
  '(scroll-step 5)
  '(sgml-basic-offset 2)
  '(show-paren-mode t)
- '(tool-bar-mode nil))
+ '(tool-bar-mode nil)
+ '(visible-bell t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -44,6 +46,6 @@
  '(default ((t (:height 150 :family "Menlo"))))
  '(cursor ((t (:background "red"))))
  '(highlight-symbol-face ((t (:underline t))))
- '(hl-line ((t (:background "selectedKxnobColor"))))
+ '(hl-line ((t (:background "selectedKnobColor"))))
  '(pe/directory-face ((t (:inherit dired-directory :height 140))))
  '(pe/file-face ((t (:inherit default :height 140)))))

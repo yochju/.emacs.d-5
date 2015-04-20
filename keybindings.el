@@ -30,14 +30,23 @@
 
 
 ;; Kill/copy region or line
+(defun flash-region (start end &optional timeout)
+  (let ((overlay (make-overlay start end)))
+    (overlay-put overlay 'face 'region)
+    (run-with-timer (or timeout 0.2) nil 'delete-overlay overlay)))
+
 (defun copy-region-or-line ()
+  "Copy region or a single line."
   (interactive)
-  (unless (region-active-p)
-    (set-mark-command (beginning-of-line))
-    (move-end-of-line nil))
-  (kill-ring-save (region-beginning) (region-end) t))
+  (if (region-active-p)
+      (copy-region-as-kill (region-beginning) (region-end) t)
+    (let ((start (line-beginning-position))
+          (end (line-end-position)))
+      (copy-region-as-kill start end)
+      (flash-region start end))))
 
 (defun kill-region-or-line ()
+  "Kill region or a single line."
   (interactive)
   (if (region-active-p)
       (kill-region (region-beginning) (region-end) t)
