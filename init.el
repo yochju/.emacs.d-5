@@ -38,11 +38,17 @@
 ;; Save desktop
 (desktop-save-mode)
 
+;; Auto-revert buffer on file change
+(auto-revert-mode)
+
 ;; Prettify programming languages keywords
 (global-prettify-symbols-mode)
 
 ;; Display column number
 (column-number-mode t)
+
+;; emacs-lisp-mode
+(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 
 ;; Load packages
 (load "~/.emacs.d/packages.el")

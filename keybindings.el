@@ -1,13 +1,15 @@
 ;;; Various keybindings
-(global-set-key (kbd "C--") 'undo)
+(bind-key "C--" 'undo)
 
-(global-set-key (kbd "C-c C-/") 'comment-region)
+;; Comment/uncomment
+(bind-key "C-c C-/" 'comment-region)
+(bind-key "C-c C-\\" 'uncomment-region)
 
-(global-set-key (kbd "C-c C-\\") 'uncomment-region)
+;; JSON
+(bind-key "C-x C-j" 'json-pretty-print-buffer)
 
-(global-set-key (kbd "C-x C-j") 'json-pretty-print-buffer)
-
-(global-set-key (kbd "C-c C-f") 'find-file-at-point)
+;; Fullscreen
+(bind-key "C-c f" 'toggle-frame-fullscreen)
 
 
 ;; Jump to definition of symbol at point
@@ -16,23 +18,6 @@
   (imenu (symbol-at-point)))
 
 (bind-key "M-." 'jump-to-definition)
-
-
-;; Toggle full screen mode
-(defun toggle-distraction-free ()
-  (interactive)
-  (if (eq 'fullboth (frame-parameter nil 'fullscreen))
-      (set-fringe-mode '(8 . 8))
-    (run-with-timer
-     0.7 nil
-     (lambda ()
-       (set-fringe-mode
-        (/ (- (frame-pixel-width)
-              (* 120 (frame-char-width)))
-           2)))))
-  (toggle-frame-fullscreen))
-
-(bind-key "C-c f" 'toggle-distraction-free)
 
 
 ;; Kill/copy region or line

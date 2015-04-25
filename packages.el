@@ -12,10 +12,10 @@
 (require 'use-package)
 (require 'bind-key)
 
-;; git-gutter-fringe
-(use-package git-gutter-fringe
+;; diff-hl
+(use-package diff-hl
   :ensure t
-  :init (global-git-gutter-mode 1))
+  :init (global-diff-hl-mode))
 
 ;; company-mode
 (use-package company
@@ -27,12 +27,18 @@
 (use-package helm
   :ensure t
   :bind (("C-x C-b" . helm-mini)
+         ("C-M-s" . swiper-helm)
          ("M-x" . helm-M-x))
-  :config (bind-key "C-i" 'helm-execute-persistent-action helm-map))
+  :config
+  (progn
+    (use-package swiper-helm :ensure t)
+    (bind-key "C-i" 'helm-execute-persistent-action helm-map)
+    (bind-key "M-<tab>" 'helm-select-action helm-map)
+    (bind-key "C-M-i" 'helm-select-action helm-map)))
 
 (use-package helm-git-grep
   :ensure t
-  :bind ("C-x C-p" . helm-git-grep))
+  :bind ("C-x C-g" . helm-git-grep))
 
 ;; Markdown
 (use-package markdown-mode
@@ -104,33 +110,18 @@
 ;; Flycheck
 (use-package flycheck
   :ensure t
-  :init (global-flycheck-mode))
+  :config (global-flycheck-mode))
 
 ;; Flyspell
 (use-package flyspell
   :init (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+  :config (setq flyspell-prog-text-faces '(font-lock-comment-face font-lock-doc-face))
   :bind ([down-mouse-3] . flyspell-correct-word))
-
-
-;; project-explorer
-(defvar pe/update-timer nil)
-
-(defun pe/update-other-window ()
-  (when (pe/get-current-project-explorer-buffer)
-    (let ((win (selected-window)))
-      (project-explorer-open)
-      (select-window win))))
-
-(defun pe/update ()
-  (interactive)
-  (when pe/update-timer (cancel-timer pe/update-timer))
-  (setq pe/update-timer (run-with-timer 0.1 nil #'pe/update-other-window)))
 
 (use-package project-explorer
   :ensure t
   :bind (("C-c C-p" . project-explorer-open)
-         ("C-x C-d" . project-explorer-helm))
-  :config (add-hook 'post-command-hook #'pe/update))
+         ("C-x C-d" . project-explorer-helm)))
 
 ;; Highlight active window
 (use-package hiwin
@@ -146,5 +137,8 @@
   :ensure t
   :config (sml-modeline-mode t))
 
-;; emacs-lisp-mode
-(add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+;; Display the number of isearch occurrences
+(use-package anzu
+  :ensure t
+  :config (anzu-mode))
+
