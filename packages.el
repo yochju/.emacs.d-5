@@ -27,11 +27,16 @@
 (use-package helm
   :ensure t
   :bind (("C-x C-b" . helm-mini)
-         ("C-M-s" . swiper-helm)
+         ("C-x C-f" . helm-find-files)
          ("M-x" . helm-M-x))
   :config
   (progn
-    (use-package swiper-helm :ensure t)
+    (add-to-list 'display-buffer-alist
+                 `(,(rx bos "*helm" (* not-newline) "*" eos)
+                   (display-buffer-in-side-window)
+                   (inhibit-same-window . t)
+                   (window-height . 0.4)))
+
     (bind-key "C-i" 'helm-execute-persistent-action helm-map)
     (bind-key "M-<tab>" 'helm-select-action helm-map)
     (bind-key "C-M-i" 'helm-select-action helm-map)))
@@ -45,19 +50,10 @@
   :ensure t
   :mode "\\.md")
 
-;; js2-mode
-(defun js2-insert-this ()
-  (interactive)
-  (let ((node (js2-node-at-point)))
-    (if (or (js2-comment-node-p node) (js2-string-node-p node))
-        (insert "@")
-      (progn
-        (delete-char 0)
-        (insert "this")))))
-
+;; JavaScript
 (use-package js2-mode
   :ensure t
-  :mode "\\.js$"
+  ;:mode "\\.js$"
   :config
   (progn
     (setq js2-bounce-indent-p t
@@ -66,16 +62,14 @@
           js2-skip-preprocessor-directives t
           js2-strict-inconsistent-return-warning nil)
 
-    (bind-key "@" 'js2-insert-this js2-mode-map)
+    (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 
     (add-hook 'js2-mode-hook
               (lambda ()
                 (push '("function" . ?ƒ) prettify-symbols-alist)
                 (push '("this" . ?@) prettify-symbols-alist)
                 (push '(">=" . ?≥) prettify-symbols-alist)
-                (push '("<=" . ?≤) prettify-symbols-alist)))
-
-    (add-hook 'js2-mode-hook 'tern-mode)))
+                (push '("<=" . ?≤) prettify-symbols-alist)))))
 
 ;; Tern
 (use-package tern
@@ -83,7 +77,35 @@
   :init (autoload 'tern-mode "tern" nil t))
 
 (use-package company-tern
-  :ensure t)
+  :ensure t
+  :config (add-to-list 'company-backends 'company-tern))
+
+;; @ -> this
+(defun js-insert-this ()
+  (interactive)
+  (let ((face (get-text-property (point) 'font-lock-face)))
+    (if (or
+         (eq face 'font-lock-comment-face)
+         (eq face 'font-lock-string-face))
+        (insert "@")
+      (progn
+        (delete-char 0)
+        (insert "this")))))
+
+(use-package tj-mode
+  :load-path "~/Sites/tj-mode/"
+  :mode "\\.js$"
+  :config
+  (progn
+   (bind-key "@" 'js-insert-this tj-mode-map)
+
+   (add-hook
+    'tj-mode-hook
+    (lambda ()
+      (push '("function" . ?ƒ) prettify-symbols-alist)
+      (push '("this" . ?@) prettify-symbols-alist)
+      (push '(">=" . ?≥) prettify-symbols-alist)
+      (push '("<=" . ?≤) prettify-symbols-alist)))))
 
 ;; nodejs-repl
 (use-package nodejs-repl
@@ -93,6 +115,16 @@
 (use-package coffee-mode
   :ensure t
   :config (progn
+            (use-package sourcemap :ensure t)
+
+            (add-hook 'coffee-after-compile-hook 'sourcemap-goto-corresponding-point)
+
+            ;; If you want to remove sourcemap file after jumping corresponding point
+            (defun my/coffee-after-compile-hook (props)
+              (sourcemap-goto-corresponding-point props)
+              (delete-file (plist-get props :sourcemap)))
+
+            (add-hook 'coffee-after-compile-hook 'my/coffee-after-compile-hook)
             (add-hook 'coffee-mode-hook 'tern-mode)
             (add-hook 'coffee-mode-hook 'highlight-symbol-mode)))
 
@@ -121,7 +153,8 @@
 (use-package project-explorer
   :ensure t
   :bind (("C-c C-p" . project-explorer-open)
-         ("C-x C-d" . project-explorer-helm)))
+         ("C-x C-d" . project-explorer-helm))
+  :config (run-with-timer 1 nil #'project-explorer-open))
 
 ;; Highlight active window
 (use-package hiwin
@@ -129,16 +162,12 @@
   :config (hiwin-mode t))
 
 ;; Smart mode line
-(use-package smart-mode-line
-  :ensure t
-  :config (smart-mode-line-enable))
+;; (use-package smart-mode-line
+;;   :ensure t
+;;   :config
+;;   (progn
+;;     (setq sml/theme 'respectful)
+;;     (smart-mode-line-enable)
+;;     (load-theme 'misterioso)))
 
-(use-package sml-modeline
-  :ensure t
-  :config (sml-modeline-mode t))
-
-;; Display the number of isearch occurrences
-(use-package anzu
-  :ensure t
-  :config (anzu-mode))
-
+;;; packages.el ends here

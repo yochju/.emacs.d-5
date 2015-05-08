@@ -10,7 +10,6 @@
 ;; y-or-no-p
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-
 (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
 (setq exec-path (append exec-path '("/usr/local/bin")))
 
@@ -24,11 +23,11 @@
 (electric-pair-mode -1)
 
 ;; Save command history across sessions
-(savehist-mode t)
+(savehist-mode)
 (setq history-length 1000)
 
 ;; whitespace-mode
-(global-whitespace-mode t)
+(global-whitespace-mode)
 (setq-default whitespace-style
               '(face tab trailing space-before-tab space-after-tab))
 
@@ -39,13 +38,13 @@
 (desktop-save-mode)
 
 ;; Auto-revert buffer on file change
-(auto-revert-mode)
+(global-auto-revert-mode)
 
 ;; Prettify programming languages keywords
 (global-prettify-symbols-mode)
 
 ;; Display column number
-(column-number-mode t)
+(column-number-mode)
 
 ;; emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
