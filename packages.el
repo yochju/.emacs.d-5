@@ -161,6 +161,18 @@
   :ensure t
   :config (hiwin-mode t))
 
+(use-package indent-guide
+  :ensure t
+  :config
+  (progn
+    (add-hook 'coffee-mode-hook 'indent-guide-mode)
+    (add-hook 'sass-mode-hook 'indent-guide-mode)
+    (add-hook 'sgml-mode-hook 'indent-guide-mode)))
+
+(use-package volatile-highlights
+  :ensure t
+  :config (volatile-highlights-mode))
+
 ;; Smart mode line
 ;; (use-package smart-mode-line
 ;;   :ensure t
