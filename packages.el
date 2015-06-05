@@ -30,7 +30,6 @@
 (use-package helm
   :ensure t
   :bind (("C-x C-b" . helm-mini)
-         ("C-x C-f" . helm-find-files)
          ("M-x" . helm-M-x))
   :config
   (progn

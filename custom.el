@@ -4,9 +4,11 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(cursor-type (quote bar))
- '(custom-enabled-themes (quote (misterioso)))
  '(desktop-buffers-not-to-save ".")
  '(desktop-files-not-to-save ".")
+ '(flycheck-checkers
+   (quote
+    (coffee coffee-coffeelint css-csslint emacs-lisp erlang haml javascript-eslint json-jsonlint less python-flake8 python-pylint python-pycompile sass scss-lint scss xml-xmlstarlet xml-xmllint yaml-jsyaml)))
  '(mouse-wheel-progressive-speed nil)
  '(mouse-wheel-scroll-amount (quote (1 ((shift) . 1) ((control)))))
  '(ns-function-modifier (quote alt))
@@ -25,6 +27,5 @@
  '(default ((t (:height 140 :family "Menlo"))))
  '(cursor ((t (:background "red"))))
  '(highlight-symbol-face ((t (:underline t))))
- '(hl-line ((t (:background "#4f5b66"))))
  '(pe/directory-face ((t (:inherit dired-directory :height 130))))
  '(pe/file-face ((t (:inherit default :height 130)))))

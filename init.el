@@ -34,7 +34,7 @@
 (show-paren-mode t)
 
 ;; Toolbar is useless
-(tool-bar-mode nil)
+(tool-bar-mode -1)
 
 ;; Display tabs and trailing spaces
 (global-whitespace-mode t)
@@ -58,6 +58,11 @@
 ;; emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
 
+;; Display file path in the title bar
+(setq frame-title-format
+      '((:eval (if (buffer-file-name)
+                   (abbreviate-file-name (buffer-file-name))
+                 "%b"))))
 ;; Load packages
 (load "~/.emacs.d/packages.el")
 
