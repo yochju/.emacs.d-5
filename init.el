@@ -7,16 +7,18 @@
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
 
-;; y-or-no-p
-(defalias 'yes-or-no-p 'y-or-n-p)
-
+;; Set system PATH
 (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
 (setq exec-path (append exec-path '("/usr/local/bin")))
+
+;; y-or-no-p
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 ;; Set tabs to 4 spaces
 (setq-default indent-tabs-mode nil)
 (setq standard-indent 4)
 (setq tab-width 4)
+(setq sgml-basic-offset 2)
 
 ;; Electric
 (electric-indent-mode -1)
@@ -24,12 +26,19 @@
 
 ;; Save command history across sessions
 (savehist-mode)
-(setq history-length 1000)
 
-;; whitespace-mode
-(global-whitespace-mode)
-(setq-default whitespace-style
-              '(face tab trailing space-before-tab space-after-tab))
+;; Don't blink cursor
+(blink-cursor-mode nil)
+
+;; Highlight matching parentheses
+(show-paren-mode t)
+
+;; Toolbar is useless
+(tool-bar-mode nil)
+
+;; Display tabs and trailing spaces
+(global-whitespace-mode t)
+(setq-default whitespace-style '(face tab trailing))
 
 ;; Navigate windows with M-<arrows>
 (windmove-default-keybindings 'meta)
@@ -40,7 +49,7 @@
 ;; Auto-revert buffer on file change
 (global-auto-revert-mode)
 
-;; Prettify programming languages keywords
+;; Prettify programming languages syntax
 (global-prettify-symbols-mode)
 
 ;; Display column number

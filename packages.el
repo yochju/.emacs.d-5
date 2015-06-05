@@ -12,14 +12,17 @@
 (require 'use-package)
 (require 'bind-key)
 
-;; diff-hl
-(use-package diff-hl
+;; diff
+(use-package git-gutter-fringe
   :ensure t
-  :init (global-diff-hl-mode))
+  :init (global-git-gutter-mode))
 
 ;; company-mode
 (use-package company
   :ensure t
+  :init (setq
+         company-tooltip-align-annotations t
+         company-tooltip-minimum-width 30)
   :config (global-company-mode)
   :bind ("M-<tab>" . company-complete))
 
@@ -50,7 +53,7 @@
   :ensure t
   :mode "\\.md")
 
-;; JavaScript
+;; js2-mode
 (use-package js2-mode
   :ensure t
   ;:mode "\\.js$"
@@ -60,16 +63,7 @@
           js2-concat-multiline-strings nil
           js2-include-node-externs t
           js2-skip-preprocessor-directives t
-          js2-strict-inconsistent-return-warning nil)
-
-    (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
-
-    (add-hook 'js2-mode-hook
-              (lambda ()
-                (push '("function" . ?ƒ) prettify-symbols-alist)
-                (push '("this" . ?@) prettify-symbols-alist)
-                (push '(">=" . ?≥) prettify-symbols-alist)
-                (push '("<=" . ?≤) prettify-symbols-alist)))))
+          js2-strict-inconsistent-return-warning nil)))
 
 ;; Tern
 (use-package tern
@@ -81,7 +75,7 @@
   :config (add-to-list 'company-backends 'company-tern))
 
 ;; @ -> this
-(defun js-insert-this ()
+(defun tj/@->this ()
   (interactive)
   (let ((face (get-text-property (point) 'font-lock-face)))
     (if (or
@@ -92,12 +86,14 @@
         (delete-char 0)
         (insert "this")))))
 
+;; tj-mode
 (use-package tj-mode
-  :load-path "~/Sites/tj-mode/"
+  :ensure t
   :mode "\\.js$"
+  :bind-keymap ("@" . tj/@->this)
   :config
   (progn
-   (bind-key "@" 'js-insert-this tj-mode-map)
+   (add-to-list 'interpreter-mode-alist '("node" . tj-mode))
 
    (add-hook
     'tj-mode-hook
@@ -115,21 +111,16 @@
 (use-package coffee-mode
   :ensure t
   :config (progn
-            (use-package sourcemap :ensure t)
-
-            (add-hook 'coffee-after-compile-hook 'sourcemap-goto-corresponding-point)
-
-            ;; If you want to remove sourcemap file after jumping corresponding point
-            (defun my/coffee-after-compile-hook (props)
-              (sourcemap-goto-corresponding-point props)
-              (delete-file (plist-get props :sourcemap)))
-
-            (add-hook 'coffee-after-compile-hook 'my/coffee-after-compile-hook)
+            (setq coffee-args-compile '("-c" "--bare" "--no-header"))
+            (setq coffee-tab-width 2)
             (add-hook 'coffee-mode-hook 'tern-mode)
             (add-hook 'coffee-mode-hook 'highlight-symbol-mode)))
 
 (use-package highlight-symbol
-  :ensure t)
+  :ensure t
+  :init (setq
+         highlight-symbol-foreground-color nil
+         highlight-symbol-idle-delay 0.1))
 
 ;; Yaml
 (use-package yaml-mode
@@ -142,44 +133,31 @@
 ;; Flycheck
 (use-package flycheck
   :ensure t
+  :init (setq
+         flycheck-coffeelintrc "coffeelint.json"
+         flycheck-eslintrc "eslint.json")
   :config (global-flycheck-mode))
 
 ;; Flyspell
-(use-package flyspell
-  :init (add-hook 'prog-mode-hook 'flyspell-prog-mode)
-  :config (setq flyspell-prog-text-faces '(font-lock-comment-face font-lock-doc-face))
-  :bind ([down-mouse-3] . flyspell-correct-word))
+;; (use-package flyspell
+;;   :init (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+;;   :config (setq flyspell-prog-text-faces '(font-lock-comment-face font-lock-doc-face))
+;;   :bind ([down-mouse-3] . flyspell-correct-word))
 
 (use-package project-explorer
   :ensure t
   :bind (("C-c C-p" . project-explorer-open)
          ("C-x C-d" . project-explorer-helm))
-  :config (run-with-timer 1 nil #'project-explorer-open))
+  :init (setq
+         pe/follow-current t
+         pe/omit-gitignore t
+         pe/side 'left
+         pe/width 40))
 
 ;; Highlight active window
 (use-package hiwin
   :ensure t
   :config (hiwin-mode t))
 
-(use-package indent-guide
-  :ensure t
-  :config
-  (progn
-    (add-hook 'coffee-mode-hook 'indent-guide-mode)
-    (add-hook 'sass-mode-hook 'indent-guide-mode)
-    (add-hook 'sgml-mode-hook 'indent-guide-mode)))
-
-(use-package volatile-highlights
-  :ensure t
-  :config (volatile-highlights-mode))
-
-;; Smart mode line
-;; (use-package smart-mode-line
-;;   :ensure t
-;;   :config
-;;   (progn
-;;     (setq sml/theme 'respectful)
-;;     (smart-mode-line-enable)
-;;     (load-theme 'misterioso)))
-
 ;;; packages.el ends here
+
