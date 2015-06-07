@@ -15,7 +15,7 @@
 ;; Jump to definition of symbol at point
 (defun jump-to-definition ()
   (interactive)
-  (imenu (symbol-at-point)))
+  (imenu (symbol-name (symbol-at-point))))
 
 (bind-key "M-." 'jump-to-definition)
 
