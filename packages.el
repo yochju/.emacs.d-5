@@ -29,10 +29,12 @@
 ;; Helm
 (use-package helm
   :ensure t
-  :bind (("C-x C-b" . helm-mini)
-         ("M-x" . helm-M-x))
   :config
   (progn
+    (helm-mode)
+
+    (setq helm-split-window-in-side-p t)
+
     (add-to-list 'display-buffer-alist
                  `(,(rx bos "*helm" (* not-newline) "*" eos)
                    (display-buffer-in-side-window)
@@ -45,7 +47,23 @@
 
 (use-package helm-git-grep
   :ensure t
-  :bind ("C-x C-g" . helm-git-grep))
+  :bind ("C-x C-g" . helm-git-grep)
+  :config
+  (progn
+    (bind-key "C-x C-g" 'helm-git-grep-from-isearch isearch-mode-map)
+
+    (defvar helm-search-history nil "History of helm git-grep input")
+
+    (defun helm-git-grep-1 (&optional input)
+      "Execute helm git grep.
+Optional argument INPUT is initial input."
+      (helm :sources '(helm-source-git-grep
+                       helm-source-git-submodule-grep)
+            :buffer (if helm-git-grep-ignore-case "*helm git grep [i]*" "*helm git grep*")
+            :input input
+            :keymap helm-git-grep-map
+            :history 'helm-search-history ;; Separate history
+            :candidate-number-limit helm-git-grep-candidate-number-limit))))
 
 ;; Markdown
 (use-package markdown-mode
@@ -89,10 +107,11 @@
 (use-package tj-mode
   :ensure t
   :mode "\\.js$"
-  :bind-keymap ("@" . tj/@->this)
   :config
   (progn
    (add-to-list 'interpreter-mode-alist '("node" . tj-mode))
+
+   (bind-key "@" 'tj/@->this tj-mode-map)
 
    (add-hook
     'tj-mode-hook
@@ -134,7 +153,17 @@
   :ensure t
   :init (setq
          flycheck-coffeelintrc "coffeelint.json"
-         flycheck-eslintrc "eslint.json")
+         flycheck-eslintrc "eslint.json"
+         flycheck-checkers
+         '(coffee
+           coffee-coffeelint
+           css-csslint
+           emacs-lisp
+           haml
+           javascript-eslint
+           json-jsonlint
+           sass
+           yaml-jsyaml))
   :config (global-flycheck-mode))
 
 ;; Flyspell

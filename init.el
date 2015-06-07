@@ -18,7 +18,7 @@
 (setq-default indent-tabs-mode nil)
 (setq standard-indent 4)
 (setq tab-width 4)
-(setq sgml-basic-offset 2)
+(setq sgml-basic-offset 4)
 
 ;; Electric
 (electric-indent-mode -1)
@@ -57,6 +57,9 @@
 
 ;; emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook 'turn-on-eldoc-mode)
+
+;; Mute bell
+(setq ring-bell-function #'ignore)
 
 ;; Display file path in the title bar
 (setq frame-title-format
