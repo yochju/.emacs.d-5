@@ -29,10 +29,10 @@
 ;; Helm
 (use-package helm
   :ensure t
+  :bind ("M-x" . helm-M-x)
+  :init (helm-mode)
   :config
   (progn
-    (helm-mode)
-
     (setq helm-split-window-in-side-p t)
 
     (add-to-list 'display-buffer-alist
@@ -73,7 +73,7 @@ Optional argument INPUT is initial input."
 ;; js2-mode
 (use-package js2-mode
   :ensure t
-  ;:mode "\\.js$"
+  :mode "\\.js$"
   :config
   (progn
     (setq js2-bounce-indent-p t
@@ -92,7 +92,7 @@ Optional argument INPUT is initial input."
   :config (add-to-list 'company-backends 'company-tern))
 
 ;; @ -> this
-(defun tj/@->this ()
+(defun tj/insert-this ()
   (interactive)
   (let ((face (get-text-property (point) 'font-lock-face)))
     (if (or
@@ -101,23 +101,23 @@ Optional argument INPUT is initial input."
         (insert "@")
       (progn
         (delete-char 0)
-        (insert "this")))))
+        (insert "this.")))))
 
 ;; tj-mode
 (use-package tj-mode
   :ensure t
-  :mode "\\.js$"
+  ;:mode "\\.js$"
   :config
   (progn
    (add-to-list 'interpreter-mode-alist '("node" . tj-mode))
 
-   (bind-key "@" 'tj/@->this tj-mode-map)
+   (bind-key "@" 'tj/insert-this tj-mode-map)
 
    (add-hook
     'tj-mode-hook
     (lambda ()
       (push '("function" . ?ƒ) prettify-symbols-alist)
-      (push '("this" . ?@) prettify-symbols-alist)
+      (push '("this." . ?@) prettify-symbols-alist)
       (push '(">=" . ?≥) prettify-symbols-alist)
       (push '("<=" . ?≤) prettify-symbols-alist)))))
 

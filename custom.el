@@ -4,6 +4,8 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(cursor-type (quote bar))
+ '(dabbrev-case-distinction nil)
+ '(dabbrev-case-replace nil)
  '(desktop-buffers-not-to-save ".")
  '(desktop-files-not-to-save ".")
  '(mouse-wheel-progressive-speed nil)
