@@ -29,10 +29,31 @@
 ;; Helm
 (use-package helm
   :ensure t
-  :bind ("M-x" . helm-M-x)
+  :bind (("M-x" . helm-M-x)
+         ("C-x C-b" . helm-mini)
+         ("C-x C-o" . helm-occur-from-isearch))
   :init (helm-mode)
   :config
   (progn
+    ;(setq helm-display-header-line nil)
+
+    (setq helm-echo-input-in-header-line t)
+
+    (set-face-attribute 'helm-source-header nil :height 130)
+
+    (defun helm-hide-minibuffer-maybe ()
+      (when (with-helm-buffer helm-echo-input-in-header-line)
+        (let ((ov (make-overlay (point-min) (point-max) nil nil t)))
+          (overlay-put ov 'window (selected-window))
+          (overlay-put ov 'face (let ((bg-color (face-background 'default nil)))
+                                  `(:background ,bg-color :foreground ,bg-color)))
+          (setq-local cursor-type nil))))
+
+    (add-hook 'helm-minibuffer-set-up-hook 'helm-hide-minibuffer-maybe)
+
+    (add-to-list 'helm-completing-read-handlers-alist
+                 '(find-file . nil))
+
     (setq helm-split-window-in-side-p t)
 
     (add-to-list 'display-buffer-alist
@@ -42,7 +63,6 @@
                    (window-height . 0.4)))
 
     (bind-key "C-i" 'helm-execute-persistent-action helm-map)
-    (bind-key "M-<tab>" 'helm-select-action helm-map)
     (bind-key "C-M-i" 'helm-select-action helm-map)))
 
 (use-package helm-git-grep
@@ -76,6 +96,16 @@ Optional argument INPUT is initial input."
   :mode "\\.js$"
   :config
   (progn
+   (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
+
+   (add-hook
+    'js2-mode-hook
+    (lambda ()
+      (push '("function" . ?ƒ) prettify-symbols-alist)
+      (push '("this." . ?@) prettify-symbols-alist)
+      (push '(">=" . ?≥) prettify-symbols-alist)
+      (push '("<=" . ?≤) prettify-symbols-alist)))
+
     (setq js2-bounce-indent-p t
           js2-concat-multiline-strings nil
           js2-include-node-externs t
@@ -91,36 +121,6 @@ Optional argument INPUT is initial input."
   :ensure t
   :config (add-to-list 'company-backends 'company-tern))
 
-;; @ -> this
-(defun tj/insert-this ()
-  (interactive)
-  (let ((face (get-text-property (point) 'font-lock-face)))
-    (if (or
-         (eq face 'font-lock-comment-face)
-         (eq face 'font-lock-string-face))
-        (insert "@")
-      (progn
-        (delete-char 0)
-        (insert "this.")))))
-
-;; tj-mode
-(use-package tj-mode
-  :ensure t
-  ;:mode "\\.js$"
-  :config
-  (progn
-   (add-to-list 'interpreter-mode-alist '("node" . tj-mode))
-
-   (bind-key "@" 'tj/insert-this tj-mode-map)
-
-   (add-hook
-    'tj-mode-hook
-    (lambda ()
-      (push '("function" . ?ƒ) prettify-symbols-alist)
-      (push '("this." . ?@) prettify-symbols-alist)
-      (push '(">=" . ?≥) prettify-symbols-alist)
-      (push '("<=" . ?≤) prettify-symbols-alist)))))
-
 ;; nodejs-repl
 (use-package nodejs-repl
   :ensure t
@@ -131,7 +131,6 @@ Optional argument INPUT is initial input."
   :config (progn
             (setq coffee-args-compile '("-c" "--bare" "--no-header"))
             (setq coffee-tab-width 2)
-            (add-hook 'coffee-mode-hook 'tern-mode)
             (add-hook 'coffee-mode-hook 'highlight-symbol-mode)))
 
 (use-package highlight-symbol
@@ -167,20 +166,30 @@ Optional argument INPUT is initial input."
   :config (global-flycheck-mode))
 
 ;; Flyspell
-;; (use-package flyspell
-;;   :init (add-hook 'prog-mode-hook 'flyspell-prog-mode)
-;;   :config (setq flyspell-prog-text-faces '(font-lock-comment-face font-lock-doc-face))
-;;   :bind ([down-mouse-3] . flyspell-correct-word))
+(use-package flyspell
+  :init (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+  :config (setq flyspell-prog-text-faces '(font-lock-comment-face font-lock-doc-face))
+  :bind ([down-mouse-3] . flyspell-correct-word))
+
+(defun pe/hide-scrollbar ()
+  "Remove scrollbar."
+  (set-window-scroll-bars nil 0))
 
 (use-package project-explorer
   :ensure t
   :bind (("C-c C-p" . project-explorer-open)
          ("C-x C-d" . project-explorer-helm))
+  :config (progn
+            (add-hook 'project-explorer-mode-hook 'pe/hide-scrollbar)
+            (add-hook 'project-explorer-mode-hook 'hl-line-mode))
   :init (setq
          pe/follow-current t
          pe/omit-gitignore t
-         pe/side 'left
-         pe/width 40))
+         pe/width 35))
+
+(use-package smart-mode-line
+  :ensure t
+  :init (smart-mode-line-enable))
 
 ;; Highlight active window
 (use-package hiwin

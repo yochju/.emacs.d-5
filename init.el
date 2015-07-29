@@ -36,6 +36,9 @@
 ;; Toolbar is useless
 (tool-bar-mode -1)
 
+;; Hide scrollbars
+(scroll-bar-mode -1)
+
 ;; Display tabs and trailing spaces
 (global-whitespace-mode t)
 (setq-default whitespace-style '(face tab trailing))
