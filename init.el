@@ -69,6 +69,12 @@
       '((:eval (if (buffer-file-name)
                    (abbreviate-file-name (buffer-file-name))
                  "%b"))))
+
+(add-hook 'minibuffer-setup-hook 'my-minibuffer-setup)
+(defun my-minibuffer-setup ()
+  (set (make-local-variable 'face-remapping-alist)
+       '((default :height 1.5 :foreground "white"))))
+
 ;; Load packages
 (load "~/.emacs.d/packages.el")
 
@@ -76,3 +82,4 @@
 (load "~/.emacs.d/keybindings.el")
 
 (server-start)
+

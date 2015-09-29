@@ -9,13 +9,18 @@
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
-(require 'use-package)
+(eval-when-compile
+  (require 'use-package))
 (require 'bind-key)
 
 ;; diff
-(use-package git-gutter-fringe
+;; (use-package git-gutter-fringe
+;;   :ensure t
+;;   :init (global-git-gutter-mode))
+
+(use-package diff-hl
   :ensure t
-  :init (global-git-gutter-mode))
+  :init (global-diff-hl-mode t))
 
 ;; company-mode
 (use-package company
@@ -35,21 +40,21 @@
   :init (helm-mode)
   :config
   (progn
-    ;(setq helm-display-header-line nil)
+    (setq helm-display-header-line nil)
 
-    (setq helm-echo-input-in-header-line t)
+    ;(setq helm-echo-input-in-header-line t)
 
     (set-face-attribute 'helm-source-header nil :height 130)
 
-    (defun helm-hide-minibuffer-maybe ()
-      (when (with-helm-buffer helm-echo-input-in-header-line)
-        (let ((ov (make-overlay (point-min) (point-max) nil nil t)))
-          (overlay-put ov 'window (selected-window))
-          (overlay-put ov 'face (let ((bg-color (face-background 'default nil)))
-                                  `(:background ,bg-color :foreground ,bg-color)))
-          (setq-local cursor-type nil))))
+    ;; (defun helm-hide-minibuffer-maybe ()
+    ;;   (when (with-helm-buffer helm-echo-input-in-header-line)
+    ;;     (let ((ov (make-overlay (point-min) (point-max) nil nil t)))
+    ;;       (overlay-put ov 'window (selected-window))
+    ;;       (overlay-put ov 'face (let ((bg-color (face-background 'default nil)))
+    ;;                               `(:background ,bg-color :foreground ,bg-color)))
+    ;;       (setq-local cursor-type nil))))
 
-    (add-hook 'helm-minibuffer-set-up-hook 'helm-hide-minibuffer-maybe)
+    ;;(add-hook 'helm-minibuffer-set-up-hook 'helm-hide-minibuffer-maybe)
 
     (add-to-list 'helm-completing-read-handlers-alist
                  '(find-file . nil))
@@ -107,6 +112,7 @@ Optional argument INPUT is initial input."
       (push '("<=" . ?≤) prettify-symbols-alist)))
 
     (setq js2-bounce-indent-p t
+          js2-strict-missing-semi-warning nil
           js2-concat-multiline-strings nil
           js2-include-node-externs t
           js2-skip-preprocessor-directives t
@@ -171,16 +177,11 @@ Optional argument INPUT is initial input."
   :config (setq flyspell-prog-text-faces '(font-lock-comment-face font-lock-doc-face))
   :bind ([down-mouse-3] . flyspell-correct-word))
 
-(defun pe/hide-scrollbar ()
-  "Remove scrollbar."
-  (set-window-scroll-bars nil 0))
-
 (use-package project-explorer
   :ensure t
   :bind (("C-c C-p" . project-explorer-open)
          ("C-x C-d" . project-explorer-helm))
   :config (progn
-            (add-hook 'project-explorer-mode-hook 'pe/hide-scrollbar)
             (add-hook 'project-explorer-mode-hook 'hl-line-mode))
   :init (setq
          pe/follow-current t
@@ -191,10 +192,12 @@ Optional argument INPUT is initial input."
   :ensure t
   :init (smart-mode-line-enable))
 
+(load-theme 'atom-one-dark)
+
 ;; Highlight active window
-(use-package hiwin
-  :ensure t
-  :config (hiwin-mode t))
+;; (use-package hiwin
+;;   :ensure t
+;;   :config (hiwin-mode t))
+
 
 ;;; packages.el ends here
-
