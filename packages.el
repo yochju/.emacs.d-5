@@ -173,26 +173,41 @@ Optional argument INPUT is initial input."
 
 ;; Flyspell
 (use-package flyspell
-  :init (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+  :init (progn
+          (add-hook 'text-mode-hook 'flyspell-mode)
+          (add-hook 'markdown-mode-hook 'flyspell-mode))
   :config (setq flyspell-prog-text-faces '(font-lock-comment-face font-lock-doc-face))
   :bind ([down-mouse-3] . flyspell-correct-word))
 
+;; Project explorer
 (use-package project-explorer
   :ensure t
   :bind (("C-c C-p" . project-explorer-open)
          ("C-x C-d" . project-explorer-helm))
   :config (progn
+            (add-hook 'project-explorer-mode-hook (lambda () (setq-local left-fringe-width 2)))
             (add-hook 'project-explorer-mode-hook 'hl-line-mode))
   :init (setq
          pe/follow-current t
          pe/omit-gitignore t
          pe/width 35))
 
+;; Restclient
+(use-package restclient
+  :ensure t)
+
+;; Multiple cursors
+(use-package multiple-cursors
+  :ensure t
+  :bind (("C-]" . mc/edit-lines)))
+
 (use-package smart-mode-line
   :ensure t
   :init (smart-mode-line-enable))
 
-(load-theme 'atom-one-dark)
+(use-package atom-one-dark-theme
+  :ensure t
+  :init (load-theme 'atom-one-dark))
 
 ;; Highlight active window
 ;; (use-package hiwin

@@ -25,7 +25,7 @@
  '(ns-pop-up-frames nil)
  '(ns-right-alternate-modifier (quote none))
  '(ns-use-native-fullscreen nil)
- '(remember-notes-initial-major-mode (quote text-mode))
+ '(remember-notes-initial-major-mode (quote markdown-mode))
  '(safe-local-variable-values
    (quote
     ((js2-basic-offset . 2)
@@ -40,10 +40,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:height 140 :family "Menlo"))))
+ '(default ((t (:height 150 :family "Menlo"))))
  '(cursor ((t (:background "red"))))
+ '(fringe ((t (:background "#333"))))
  '(helm-selection ((t (:background "#3E4450"))))
- '(helm-source-header ((t (:foreground "282C34" :height 0.1))))
+ '(helm-source-header ((t (:height 130))))
  '(highlight-symbol-face ((t (:underline t))))
  '(minibuffer-prompt ((t (:background "#3E4450"))))
  '(pe/directory-face ((t (:inherit dired-directory :height 130))))

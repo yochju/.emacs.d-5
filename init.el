@@ -39,6 +39,9 @@
 ;; Hide scrollbars
 (scroll-bar-mode -1)
 
+(setq-default left-fringe-width 32)
+(setq-default right-fringe-width 6)
+
 ;; Display tabs and trailing spaces
 (global-whitespace-mode t)
 (setq-default whitespace-style '(face tab trailing))
@@ -70,10 +73,12 @@
                    (abbreviate-file-name (buffer-file-name))
                  "%b"))))
 
+;; Make the minibuffer prompt's font bigger
 (add-hook 'minibuffer-setup-hook 'my-minibuffer-setup)
 (defun my-minibuffer-setup ()
   (set (make-local-variable 'face-remapping-alist)
        '((default :height 1.5 :foreground "white"))))
+
 
 ;; Load packages
 (load "~/.emacs.d/packages.el")
