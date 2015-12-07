@@ -106,6 +106,8 @@ Optional argument INPUT is initial input."
    (add-hook
     'js2-mode-hook
     (lambda ()
+      (tern-mode)
+
       (push '("function" . ?ƒ) prettify-symbols-alist)
       (push '("this." . ?@) prettify-symbols-alist)
       (push '(">=" . ?≥) prettify-symbols-alist)
@@ -185,7 +187,7 @@ Optional argument INPUT is initial input."
   :bind (("C-c C-p" . project-explorer-open)
          ("C-x C-d" . project-explorer-helm))
   :config (progn
-            (add-hook 'project-explorer-mode-hook (lambda () (setq-local left-fringe-width 2)))
+            (add-hook 'project-explorer-mode-hook (lambda () (setq-local left-fringe-width 6)))
             (add-hook 'project-explorer-mode-hook 'hl-line-mode))
   :init (setq
          pe/follow-current t
@@ -200,6 +202,13 @@ Optional argument INPUT is initial input."
 (use-package multiple-cursors
   :ensure t
   :bind (("C-]" . mc/edit-lines)))
+
+;; CSS colors
+(use-package rainbow-mode
+  :ensure t
+  :config (progn
+            (setq rainbow-html-colors nil)
+            (add-hook 'css-mode-hook #'rainbow-mode)))
 
 (use-package smart-mode-line
   :ensure t

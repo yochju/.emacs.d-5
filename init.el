@@ -39,7 +39,7 @@
 ;; Hide scrollbars
 (scroll-bar-mode -1)
 
-(setq-default left-fringe-width 32)
+(setq-default left-fringe-width 18)
 (setq-default right-fringe-width 6)
 
 ;; Display tabs and trailing spaces
