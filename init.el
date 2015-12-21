@@ -88,3 +88,4 @@
 
 (server-start)
 
+(put 'upcase-region 'disabled nil)

@@ -13,11 +13,6 @@
   (require 'use-package))
 (require 'bind-key)
 
-;; diff
-;; (use-package git-gutter-fringe
-;;   :ensure t
-;;   :init (global-git-gutter-mode))
-
 (use-package diff-hl
   :ensure t
   :init (global-diff-hl-mode t))
@@ -42,10 +37,9 @@
   (progn
     (setq helm-display-header-line nil)
 
-    ;(setq helm-echo-input-in-header-line t)
-
     (set-face-attribute 'helm-source-header nil :height 130)
 
+    ;; (setq helm-echo-input-in-header-line t)
     ;; (defun helm-hide-minibuffer-maybe ()
     ;;   (when (with-helm-buffer helm-echo-input-in-header-line)
     ;;     (let ((ov (make-overlay (point-min) (point-max) nil nil t)))
@@ -53,8 +47,7 @@
     ;;       (overlay-put ov 'face (let ((bg-color (face-background 'default nil)))
     ;;                               `(:background ,bg-color :foreground ,bg-color)))
     ;;       (setq-local cursor-type nil))))
-
-    ;;(add-hook 'helm-minibuffer-set-up-hook 'helm-hide-minibuffer-maybe)
+    ;; (add-hook 'helm-minibuffer-set-up-hook 'helm-hide-minibuffer-maybe)
 
     (add-to-list 'helm-completing-read-handlers-alist
                  '(find-file . nil))
@@ -90,6 +83,11 @@ Optional argument INPUT is initial input."
             :history 'helm-search-history ;; Separate history
             :candidate-number-limit helm-git-grep-candidate-number-limit))))
 
+;; Count matched lines
+(use-package anzu
+  :ensure t
+  :init (global-anzu-mode))
+
 ;; Markdown
 (use-package markdown-mode
   :ensure t
@@ -101,17 +99,29 @@ Optional argument INPUT is initial input."
   :mode "\\.js$"
   :config
   (progn
-   (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
+    (defun js2-insert-this ()
+      (interactive)
+      (let ((node (js2-node-at-point)))
+        (if (or (js2-comment-node-p node) (js2-string-node-p node))
+            (insert "@")
+          (progn
+            (delete-char 0)
+            (insert "this.")))))
 
-   (add-hook
-    'js2-mode-hook
-    (lambda ()
-      (tern-mode)
+    (bind-key "@" 'js2-insert-this js2-mode-map)
 
-      (push '("function" . ?ƒ) prettify-symbols-alist)
-      (push '("this." . ?@) prettify-symbols-alist)
-      (push '(">=" . ?≥) prettify-symbols-alist)
-      (push '("<=" . ?≤) prettify-symbols-alist)))
+    (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
+
+    (add-hook
+     'js2-mode-hook
+     (lambda ()
+       (tern-mode)
+
+       (push '("function" . ?ƒ) prettify-symbols-alist)
+       (push '("=>" . ?⟹) prettify-symbols-alist)
+       (push '("this." . ?@) prettify-symbols-alist)
+       (push '(">=" . ?≥) prettify-symbols-alist)
+       (push '("<=" . ?≤) prettify-symbols-alist)))
 
     (setq js2-bounce-indent-p t
           js2-strict-missing-semi-warning nil
@@ -147,6 +157,11 @@ Optional argument INPUT is initial input."
          highlight-symbol-foreground-color nil
          highlight-symbol-idle-delay 0.1))
 
+;; JSON
+(use-package json-mode
+  :ensure t
+  :mode "\\.json")
+
 ;; Yaml
 (use-package yaml-mode
   :ensure t)
@@ -169,7 +184,6 @@ Optional argument INPUT is initial input."
            haml
            javascript-eslint
            json-jsonlint
-           sass
            yaml-jsyaml))
   :config (global-flycheck-mode))
 
@@ -194,15 +208,6 @@ Optional argument INPUT is initial input."
          pe/omit-gitignore t
          pe/width 35))
 
-;; Restclient
-(use-package restclient
-  :ensure t)
-
-;; Multiple cursors
-(use-package multiple-cursors
-  :ensure t
-  :bind (("C-]" . mc/edit-lines)))
-
 ;; CSS colors
 (use-package rainbow-mode
   :ensure t
@@ -217,11 +222,5 @@ Optional argument INPUT is initial input."
 (use-package atom-one-dark-theme
   :ensure t
   :init (load-theme 'atom-one-dark))
-
-;; Highlight active window
-;; (use-package hiwin
-;;   :ensure t
-;;   :config (hiwin-mode t))
-
 
 ;;; packages.el ends here

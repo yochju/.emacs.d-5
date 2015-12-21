@@ -4,12 +4,14 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(cursor-type (quote bar))
- '(custom-enabled-themes (quote (smart-mode-line-dark)))
+ '(custom-safe-themes
+   (quote
+    ("4904daa168519536b08ca4655d798ca0fb50d3545e6244cefcf7d0c7b338af7e" "3c83b3676d796422704082049fc38b6966bcad960f896669dfc21a7a37a748fa" default)))
  '(dabbrev-case-distinction nil)
  '(dabbrev-case-replace nil)
  '(desktop-buffers-not-to-save ".")
  '(desktop-files-not-to-save ".")
- '(diff-hl-side (quote right))
+ '(diff-hl-side (quote left))
  '(ecb-history-make-buckets (quote never))
  '(ecb-options-version "2.40")
  '(ecb-primary-secondary-mouse-buttons (quote mouse-1--C-mouse-1))
@@ -24,7 +26,7 @@
  '(ns-pop-up-frames nil)
  '(ns-right-alternate-modifier (quote none))
  '(ns-use-native-fullscreen nil)
- '(pe/omit-gitignore nil)
+ '(pe/omit-gitignore nil t)
  '(remember-notes-initial-major-mode (quote markdown-mode))
  '(restclient-same-buffer-response nil)
  '(safe-local-variable-values
