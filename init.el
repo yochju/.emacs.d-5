@@ -67,6 +67,9 @@
 ;; Mute bell
 (setq ring-bell-function #'ignore)
 
+;; Allow upcase-region
+(put 'upcase-region 'disabled nil)
+
 ;; Display file path in the title bar
 (setq frame-title-format
       '((:eval (if (buffer-file-name)
@@ -87,5 +90,3 @@
 (load "~/.emacs.d/keybindings.el")
 
 (server-start)
-
-(put 'upcase-region 'disabled nil)

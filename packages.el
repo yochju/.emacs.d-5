@@ -157,10 +157,25 @@ Optional argument INPUT is initial input."
          highlight-symbol-foreground-color nil
          highlight-symbol-idle-delay 0.1))
 
+;; TypeScript
+(use-package tide
+  :ensure t
+  :config (add-hook 'typescript-mode-hook
+                    (lambda ()
+                      (tide-setup)
+                      (flycheck-mode +1)
+                      (setq flycheck-check-syntax-automatically '(save mode-enabled))
+                      (eldoc-mode +1)
+                      (company-mode-on))))
+
+;; aligns annotation to the right hand side
+(setq company-tooltip-align-annotations t)
+
 ;; JSON
 (use-package json-mode
   :ensure t
-  :mode "\\.json")
+  :mode "\\.json"
+  :bind (("C-c C-p" . project-explorer-open)))
 
 ;; Yaml
 (use-package yaml-mode
@@ -179,6 +194,7 @@ Optional argument INPUT is initial input."
          flycheck-checkers
          '(coffee
            coffee-coffeelint
+           typescript-tide
            css-csslint
            emacs-lisp
            haml
@@ -214,6 +230,31 @@ Optional argument INPUT is initial input."
   :config (progn
             (setq rainbow-html-colors nil)
             (add-hook 'css-mode-hook #'rainbow-mode)))
+
+
+;; Projectile
+(use-package projectile
+  :ensure t
+  :init (projectile-global-mode)
+  :config (progn
+            (load "~/.emacs.d/recentf")
+            (setq initial-scratch-message
+                  (concat
+                   "# Welcome to Emacs!\n\n"
+                   "## Recent files\n\n"
+                   (mapconcat (apply-partially #'format " - %s")
+                              (subseq recentf-list 0 10)
+                              "\n")
+                   "\n\n"
+                   "## Recent projects\n\n"
+                   (mapconcat (apply-partially #'format " - %s")
+                              (projectile-relevant-known-projects)
+                              "\n")))
+            (run-with-idle-timer 0.1 nil (lambda ()
+                                           (with-current-buffer "*scratch*"
+                                             (flyspell-mode-off)
+                                             (local-set-key [mouse-1] #'ffap-at-mouse))))))
+
 
 (use-package smart-mode-line
   :ensure t
