@@ -1,6 +1,4 @@
 (require 'package)
-
-;; MELPA
 (add-to-list 'package-archives
              '("melpa" . "http://melpa.milkbox.net/packages/") t)
 (package-initialize)
@@ -12,6 +10,15 @@
 (eval-when-compile
   (require 'use-package))
 (require 'bind-key)
+
+;; Smart mode line
+;; (use-package smart-mode-line
+;;   :ensure t
+;;   :init (smart-mode-line-enable))
+
+(use-package atom-one-dark-theme
+  :ensure t
+  :init (load-theme 'atom-one-dark))
 
 (use-package diff-hl
   :ensure t
@@ -38,16 +45,6 @@
     (setq helm-display-header-line nil)
 
     (set-face-attribute 'helm-source-header nil :height 130)
-
-    ;; (setq helm-echo-input-in-header-line t)
-    ;; (defun helm-hide-minibuffer-maybe ()
-    ;;   (when (with-helm-buffer helm-echo-input-in-header-line)
-    ;;     (let ((ov (make-overlay (point-min) (point-max) nil nil t)))
-    ;;       (overlay-put ov 'window (selected-window))
-    ;;       (overlay-put ov 'face (let ((bg-color (face-background 'default nil)))
-    ;;                               `(:background ,bg-color :foreground ,bg-color)))
-    ;;       (setq-local cursor-type nil))))
-    ;; (add-hook 'helm-minibuffer-set-up-hook 'helm-hide-minibuffer-maybe)
 
     (add-to-list 'helm-completing-read-handlers-alist
                  '(find-file . nil))
@@ -118,10 +115,7 @@ Optional argument INPUT is initial input."
        (tern-mode)
 
        (push '("function" . ?ƒ) prettify-symbols-alist)
-       (push '("=>" . ?⟹) prettify-symbols-alist)
-       (push '("this." . ?@) prettify-symbols-alist)
-       (push '(">=" . ?≥) prettify-symbols-alist)
-       (push '("<=" . ?≤) prettify-symbols-alist)))
+       (push '("this." . ?@) prettify-symbols-alist)))
 
     (setq js2-bounce-indent-p t
           js2-strict-missing-semi-warning nil
@@ -138,11 +132,6 @@ Optional argument INPUT is initial input."
 (use-package company-tern
   :ensure t
   :config (add-to-list 'company-backends 'company-tern))
-
-;; nodejs-repl
-(use-package nodejs-repl
-  :ensure t
-  :bind ("C-x C-n" . nodejs-repl))
 
 (use-package coffee-mode
   :ensure t
@@ -162,20 +151,12 @@ Optional argument INPUT is initial input."
   :ensure t
   :config (add-hook 'typescript-mode-hook
                     (lambda ()
+                      (turn-off-auto-fill)
                       (tide-setup)
                       (flycheck-mode +1)
                       (setq flycheck-check-syntax-automatically '(save mode-enabled))
                       (eldoc-mode +1)
                       (company-mode-on))))
-
-;; aligns annotation to the right hand side
-(setq company-tooltip-align-annotations t)
-
-;; JSON
-(use-package json-mode
-  :ensure t
-  :mode "\\.json"
-  :bind (("C-c C-p" . project-explorer-open)))
 
 ;; Yaml
 (use-package yaml-mode
@@ -231,37 +212,5 @@ Optional argument INPUT is initial input."
             (setq rainbow-html-colors nil)
             (add-hook 'css-mode-hook #'rainbow-mode)))
 
-
-;; Projectile
-(use-package projectile
-  :ensure t
-  :init (projectile-global-mode)
-  :config (progn
-            (load "~/.emacs.d/recentf")
-            (setq initial-scratch-message
-                  (concat
-                   "# Welcome to Emacs!\n\n"
-                   "## Recent files\n\n"
-                   (mapconcat (apply-partially #'format " - %s")
-                              (subseq recentf-list 0 10)
-                              "\n")
-                   "\n\n"
-                   "## Recent projects\n\n"
-                   (mapconcat (apply-partially #'format " - %s")
-                              (projectile-relevant-known-projects)
-                              "\n")))
-            (run-with-idle-timer 0.1 nil (lambda ()
-                                           (with-current-buffer "*scratch*"
-                                             (flyspell-mode-off)
-                                             (local-set-key [mouse-1] #'ffap-at-mouse))))))
-
-
-(use-package smart-mode-line
-  :ensure t
-  :init (smart-mode-line-enable))
-
-(use-package atom-one-dark-theme
-  :ensure t
-  :init (load-theme 'atom-one-dark))
 
 ;;; packages.el ends here

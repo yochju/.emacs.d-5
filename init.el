@@ -1,5 +1,15 @@
+;; The toolbar is useless
+(tool-bar-mode -1)
+
+;; Hide scrollbars
+(scroll-bar-mode -1)
+
+;; Custom file
 (setq custom-file "~/.emacs.d/custom.el")
 (load custom-file)
+
+;; Save desktop
+(desktop-save-mode)
 
 ;; Backup and autosave files in temporary directory
 (setq backup-directory-alist
@@ -33,12 +43,6 @@
 ;; Highlight matching parentheses
 (show-paren-mode t)
 
-;; Toolbar is useless
-(tool-bar-mode -1)
-
-;; Hide scrollbars
-(scroll-bar-mode -1)
-
 (setq-default left-fringe-width 18)
 (setq-default right-fringe-width 6)
 
@@ -48,9 +52,6 @@
 
 ;; Navigate windows with M-<arrows>
 (windmove-default-keybindings 'meta)
-
-;; Save desktop
-(desktop-save-mode)
 
 ;; Auto-revert buffer on file change
 (global-auto-revert-mode)
@@ -69,6 +70,7 @@
 
 ;; Allow upcase-region
 (put 'upcase-region 'disabled nil)
+(put 'downcase-region 'disabled nil)
 
 ;; Display file path in the title bar
 (setq frame-title-format
@@ -82,11 +84,11 @@
   (set (make-local-variable 'face-remapping-alist)
        '((default :height 1.5 :foreground "white"))))
 
-
 ;; Load packages
-(load "~/.emacs.d/packages.el")
+(run-with-idle-timer 0.1 nil #'load "~/.emacs.d/packages.el")
 
 ;; Keybindings
-(load "~/.emacs.d/keybindings.el")
+(run-with-idle-timer 1 nil #'load "~/.emacs.d/keybindings.el")
 
-(server-start)
+;; Start the Emacs server
+(run-with-idle-timer 3 nil #'server-start)

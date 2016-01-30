@@ -5,9 +5,6 @@
 (bind-key "C-c C-/" 'comment-region)
 (bind-key "C-c C-\\" 'uncomment-region)
 
-;; JSON
-(bind-key "C-x C-j" 'json-pretty-print-buffer)
-
 ;; Fullscreen
 (bind-key "C-c f" 'toggle-frame-fullscreen)
 
