@@ -12,9 +12,9 @@
 (require 'bind-key)
 
 ;; Smart mode line
-;; (use-package smart-mode-line
-;;   :ensure t
-;;   :init (smart-mode-line-enable))
+(use-package smart-mode-line
+  :ensure t
+  :init (smart-mode-line-enable))
 
 (use-package atom-one-dark-theme
   :ensure t
@@ -188,9 +188,23 @@ Optional argument INPUT is initial input."
 (use-package flyspell
   :init (progn
           (add-hook 'text-mode-hook 'flyspell-mode)
-          (add-hook 'markdown-mode-hook 'flyspell-mode))
+          (add-hook 'markdown-mode-hook 'flyspell-mode)
+          (add-hook 'prog-mode-hook 'flyspell-prog-mode)
+
+          (defun flyspell-generic-textmode-verify ()
+            "Used for `flyspell-generic-check-word-predicate' in programming modes."
+            ;; (point) is next char after the word. Must check one char before.
+            (let ((f (get-text-property (- (point) 1) 'face)))
+              (not (memq f '(markdown-pre-face markdown-language-keyword-face)))))
+
+          (setq flyspell-generic-check-word-predicate 'flyspell-generic-textmode-verify))
+
   :config (setq flyspell-prog-text-faces '(font-lock-comment-face font-lock-doc-face))
   :bind ([down-mouse-3] . flyspell-correct-word))
+
+;; Wordsmith
+(use-package wordsmith-mode
+  :ensure t)
 
 ;; Project explorer
 (use-package project-explorer
