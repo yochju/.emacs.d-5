@@ -1,3 +1,6 @@
+;; It's supposed to make Emacs faster
+(setq gc-cons-threshold 100000000)
+
 ;; The toolbar is useless
 (tool-bar-mode -1)
 
@@ -28,7 +31,7 @@
 (setq-default indent-tabs-mode nil)
 (setq standard-indent 4)
 (setq tab-width 4)
-(setq sgml-basic-offset 4)
+(setq sgml-basic-offset 2)
 
 ;; Electric
 (electric-indent-mode -1)
@@ -85,10 +88,10 @@
        '((default :height 1.5 :foreground "white"))))
 
 ;; Load packages
-(run-with-idle-timer 0.1 nil #'load "~/.emacs.d/packages.el")
+(run-with-idle-timer 0 nil #'load "~/.emacs.d/packages.el")
 
 ;; Keybindings
-(run-with-idle-timer 1 nil #'load "~/.emacs.d/keybindings.el")
+(run-with-idle-timer 0 nil #'load "~/.emacs.d/keybindings.el")
 
 ;; Start the Emacs server
-(run-with-idle-timer 3 nil #'server-start)
+(run-with-idle-timer 1 nil #'server-start)

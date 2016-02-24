@@ -15,13 +15,14 @@
  '(diff-hl-side (quote right))
  '(fill-column 200)
  '(indent-guide-global-mode t)
+ '(inhibit-startup-screen t)
  '(mouse-wheel-progressive-speed nil)
  '(mouse-wheel-scroll-amount (quote (1 ((shift) . 1) ((control)))))
  '(ns-function-modifier (quote alt))
  '(ns-pop-up-frames nil)
  '(ns-right-alternate-modifier (quote none))
  '(ns-use-native-fullscreen nil)
- '(pe/omit-gitignore t)
+ '(pe/omit-gitignore t t)
  '(safe-local-variable-values
    (quote
     ((js2-basic-offset . 2)
@@ -37,9 +38,11 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(default ((t (:height 140 :family "Menlo"))))
+ '(flycheck-error ((t (:foreground "DarkOrange" :underline (:color "Red1" :style wave)))))
+ '(flycheck-warning ((t (:foreground "DarkOrange" :underline (:color "DarkOrange" :style wave)))))
  '(fringe ((t (:background "#21252B"))))
  '(helm-selection ((t (:background "#3E4450"))))
- '(helm-source-header ((t (:height 130))))
+ '(helm-source-header ((t (:height 150))))
  '(markdown-header-face-1 ((t (:inherit markdown-header-face :height 1.5))))
  '(markdown-header-face-2 ((t (:inherit markdown-header-face :height 1.3))))
  '(markdown-header-face-3 ((t (:inherit markdown-header-face :height 1.2))))

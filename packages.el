@@ -7,26 +7,24 @@
 (unless (package-installed-p 'use-package)
   (package-refresh-contents)
   (package-install 'use-package))
+
 (eval-when-compile
-  (require 'use-package))
+  (require 'use-package)
+  (setq use-package-always-ensure t))
 (require 'bind-key)
 
 ;; Smart mode line
 (use-package smart-mode-line
-  :ensure t
   :init (smart-mode-line-enable))
 
 (use-package atom-one-dark-theme
-  :ensure t
   :init (load-theme 'atom-one-dark))
 
 (use-package diff-hl
-  :ensure t
   :init (global-diff-hl-mode t))
 
 ;; company-mode
 (use-package company
-  :ensure t
   :init (setq
          company-tooltip-align-annotations t
          company-tooltip-minimum-width 30)
@@ -35,7 +33,6 @@
 
 ;; Helm
 (use-package helm
-  :ensure t
   :bind (("M-x" . helm-M-x)
          ("C-x C-b" . helm-mini)
          ("C-x C-o" . helm-occur-from-isearch))
@@ -61,7 +58,6 @@
     (bind-key "C-M-i" 'helm-select-action helm-map)))
 
 (use-package helm-git-grep
-  :ensure t
   :bind ("C-x C-g" . helm-git-grep)
   :config
   (progn
@@ -82,17 +78,14 @@ Optional argument INPUT is initial input."
 
 ;; Count matched lines
 (use-package anzu
-  :ensure t
   :init (global-anzu-mode))
 
 ;; Markdown
 (use-package markdown-mode
-  :ensure t
   :mode "\\.md")
 
 ;; js2-mode
 (use-package js2-mode
-  :ensure t
   :mode "\\.js$"
   :config
   (progn
@@ -126,29 +119,24 @@ Optional argument INPUT is initial input."
 
 ;; Tern
 (use-package tern
-  :ensure t
   :init (autoload 'tern-mode "tern" nil t))
 
 (use-package company-tern
-  :ensure t
   :config (add-to-list 'company-backends 'company-tern))
 
 (use-package coffee-mode
-  :ensure t
   :config (progn
             (setq coffee-args-compile '("-c" "--bare" "--no-header"))
             (setq coffee-tab-width 2)
             (add-hook 'coffee-mode-hook 'highlight-symbol-mode)))
 
 (use-package highlight-symbol
-  :ensure t
   :init (setq
          highlight-symbol-foreground-color nil
          highlight-symbol-idle-delay 0.1))
 
 ;; TypeScript
 (use-package tide
-  :ensure t
   :config (add-hook 'typescript-mode-hook
                     (lambda ()
                       (turn-off-auto-fill)
@@ -168,7 +156,6 @@ Optional argument INPUT is initial input."
 
 ;; Flycheck
 (use-package flycheck
-  :ensure t
   :init (setq
          flycheck-coffeelintrc "coffeelint.json"
          flycheck-eslintrc "eslint.json"
@@ -208,7 +195,6 @@ Optional argument INPUT is initial input."
 
 ;; Project explorer
 (use-package project-explorer
-  :ensure t
   :bind (("C-c C-p" . project-explorer-open)
          ("C-x C-d" . project-explorer-helm))
   :config (progn
@@ -221,7 +207,6 @@ Optional argument INPUT is initial input."
 
 ;; CSS colors
 (use-package rainbow-mode
-  :ensure t
   :config (progn
             (setq rainbow-html-colors nil)
             (add-hook 'css-mode-hook #'rainbow-mode)))
