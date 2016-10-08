@@ -1,7 +1,11 @@
-;; It's supposed to make Emacs faster
-(setq gc-cons-threshold 100000000)
-
 ;; The toolbar is useless
+
+;; Added by Package.el.  This must come before configurations of
+;; installed packages.  Don't delete this line.  If you don't want it,
+;; just comment it out by adding a semicolon to the start of the line.
+;; You may delete these explanatory comments.
+(package-initialize)
+
 (tool-bar-mode -1)
 
 ;; Hide scrollbars
@@ -41,7 +45,7 @@
 (savehist-mode)
 
 ;; Don't blink cursor
-(blink-cursor-mode nil)
+(blink-cursor-mode -1)
 
 ;; Highlight matching parentheses
 (show-paren-mode t)

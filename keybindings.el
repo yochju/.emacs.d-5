@@ -5,7 +5,7 @@
 (bind-key "C-c C-/" 'comment-region)
 (bind-key "C-c C-\\" 'uncomment-region)
 
-;; Fullscreen
+;; Full-screen
 (bind-key "C-c f" 'toggle-frame-fullscreen)
 
 

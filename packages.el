@@ -9,16 +9,15 @@
   (package-install 'use-package))
 
 (eval-when-compile
-  (require 'use-package)
-  (setq use-package-always-ensure t))
+  (require 'use-package))
 (require 'bind-key)
 
 ;; Smart mode line
 (use-package smart-mode-line
   :init (smart-mode-line-enable))
 
-(use-package atom-one-dark-theme
-  :init (load-theme 'atom-one-dark))
+(use-package planet-theme
+  :init (load-theme 'planet))
 
 (use-package diff-hl
   :init (global-diff-hl-mode t))
@@ -30,51 +29,6 @@
          company-tooltip-minimum-width 30)
   :config (global-company-mode)
   :bind ("M-<tab>" . company-complete))
-
-;; Helm
-(use-package helm
-  :bind (("M-x" . helm-M-x)
-         ("C-x C-b" . helm-mini)
-         ("C-x C-o" . helm-occur-from-isearch))
-  :init (helm-mode)
-  :config
-  (progn
-    (setq helm-display-header-line nil)
-
-    (set-face-attribute 'helm-source-header nil :height 130)
-
-    (add-to-list 'helm-completing-read-handlers-alist
-                 '(find-file . nil))
-
-    (setq helm-split-window-in-side-p t)
-
-    (add-to-list 'display-buffer-alist
-                 `(,(rx bos "*helm" (* not-newline) "*" eos)
-                   (display-buffer-in-side-window)
-                   (inhibit-same-window . t)
-                   (window-height . 0.4)))
-
-    (bind-key "C-i" 'helm-execute-persistent-action helm-map)
-    (bind-key "C-M-i" 'helm-select-action helm-map)))
-
-(use-package helm-git-grep
-  :bind ("C-x C-g" . helm-git-grep)
-  :config
-  (progn
-    (bind-key "C-x C-g" 'helm-git-grep-from-isearch isearch-mode-map)
-
-    (defvar helm-search-history nil "History of helm git-grep input")
-
-    (defun helm-git-grep-1 (&optional input)
-      "Execute helm git grep.
-Optional argument INPUT is initial input."
-      (helm :sources '(helm-source-git-grep
-                       helm-source-git-submodule-grep)
-            :buffer (if helm-git-grep-ignore-case "*helm git grep [i]*" "*helm git grep*")
-            :input input
-            :keymap helm-git-grep-map
-            :history 'helm-search-history ;; Separate history
-            :candidate-number-limit helm-git-grep-candidate-number-limit))))
 
 ;; Count matched lines
 (use-package anzu
@@ -107,8 +61,9 @@ Optional argument INPUT is initial input."
      (lambda ()
        (tern-mode)
 
-       (push '("function" . ?ƒ) prettify-symbols-alist)
-       (push '("this." . ?@) prettify-symbols-alist)))
+       (prettify-symbols-mode -1)))
+       ;(push '("function" . ?ƒ) prettify-symbols-alist)
+       ;(push '("this." . ?@) prettify-symbols-alist)))
 
     (setq js2-bounce-indent-p t
           js2-strict-missing-semi-warning nil
@@ -141,18 +96,20 @@ Optional argument INPUT is initial input."
                     (lambda ()
                       (turn-off-auto-fill)
                       (tide-setup)
-                      (flycheck-mode +1)
+                      (flycheck-mode 1)
                       (setq flycheck-check-syntax-automatically '(save mode-enabled))
-                      (eldoc-mode +1)
+                      (eldoc-mode 1)
                       (company-mode-on))))
 
 ;; Yaml
-(use-package yaml-mode
-  :ensure t)
+(use-package yaml-mode)
 
 ;; Sass
 (use-package sass-mode
-  :ensure t)
+  :config (progn
+            (load "/Users/katspaugh/.emacs.d/company-sass.el")
+            (add-to-list 'company-backends 'company-sass)))
+
 
 ;; Flycheck
 (use-package flycheck
@@ -189,21 +146,74 @@ Optional argument INPUT is initial input."
   :config (setq flyspell-prog-text-faces '(font-lock-comment-face font-lock-doc-face))
   :bind ([down-mouse-3] . flyspell-correct-word))
 
-;; Wordsmith
-(use-package wordsmith-mode
-  :ensure t)
-
 ;; Project explorer
 (use-package project-explorer
-  :bind (("C-c C-p" . project-explorer-open)
-         ("C-x C-d" . project-explorer-helm))
+  :bind (("C-c C-p" . project-explorer-open))
   :config (progn
-            (add-hook 'project-explorer-mode-hook (lambda () (setq-local left-fringe-width 6)))
+            (add-hook 'project-explorer-mode-hook (lambda ()
+                                                    (setq-local left-fringe-width 6)
+                                                    (setq-local right-fringe-width 6)))
             (add-hook 'project-explorer-mode-hook 'hl-line-mode))
   :init (setq
          pe/follow-current t
          pe/omit-gitignore t
-         pe/width 35))
+         pe/width 30))
+
+;; Helm
+(use-package helm
+  :config
+  (progn
+    (setq helm-display-header-line nil)
+    (setq helm-split-window-in-side-p t)
+
+    (add-to-list 'display-buffer-alist
+                 `(,(rx bos "*helm" (* not-newline) "*" eos)
+                   (display-buffer-in-side-window)
+                   (inhibit-same-window . t)
+                   (window-height . 0.4)))
+
+    (bind-key "C-i" 'helm-execute-persistent-action helm-map)
+    (bind-key "C-M-i" 'helm-select-action helm-map)))
+
+(use-package helm-git-grep
+  :bind ("C-x C-g" . helm-git-grep)
+  :config
+  (progn
+    (bind-key "C-x C-g" 'helm-git-grep-from-isearch isearch-mode-map)
+
+    (defvar helm-search-history nil "History of helm git-grep input")
+
+    (defun helm-git-grep-1 (&optional input)
+      "Execute helm git grep.
+Optional argument INPUT is initial input."
+      (helm :sources '(helm-source-git-grep
+                       helm-source-git-submodule-grep)
+            :buffer (if helm-git-grep-ignore-case "*helm git grep [i]*" "*helm git grep*")
+            :input input
+            :keymap helm-git-grep-map
+            :history 'helm-search-history ;; Separate history
+            :candidate-number-limit helm-git-grep-candidate-number-limit))))
+
+;; Which key
+(use-package which-key
+  ;:config (which-key-setup-side-window-right)
+  :config (which-key-setup-minibuffer)
+  :init (which-key-mode 1))
+
+;; Ivy
+(use-package ivy
+  :config (define-key ivy-minibuffer-map (kbd "C-w") 'ivy-yank-word)
+  :init (ivy-mode 1))
+
+(use-package swiper
+  :bind (("C-c C-s" . swiper)))
+
+(use-package smex)
+
+(use-package counsel
+  :init (counsel-mode 1)
+  :bind (("C-x C-b" . ivy-switch-buffer)
+         ("C-x C-d" . counsel-git)))
 
 ;; CSS colors
 (use-package rainbow-mode
