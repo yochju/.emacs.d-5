@@ -19,6 +19,9 @@
 (use-package planet-theme
   :init (load-theme 'planet))
 
+;; (use-package atom-one-dark-theme
+;;   :init (load-theme 'atom-one-dark))
+
 (use-package diff-hl
   :init (global-diff-hl-mode t))
 
@@ -36,41 +39,36 @@
 
 ;; Markdown
 (use-package markdown-mode
-  :mode "\\.md")
+  :ensure t
+  :commands (markdown-mode gfm-mode)
+  :mode (("README\\.md\\'" . gfm-mode)
+         ("\\.md\\'" . markdown-mode)
+         ("\\.markdown\\'" . markdown-mode))
+  :init (setq markdown-command "multimarkdown"))
+
+(use-package js2-highlight-vars
+  :config (add-hook 'js2-mode-hook (lambda () (js2-highlight-vars-mode))))
 
 ;; js2-mode
 (use-package js2-mode
   :mode "\\.js$"
   :config
   (progn
-    (defun js2-insert-this ()
-      (interactive)
-      (let ((node (js2-node-at-point)))
-        (if (or (js2-comment-node-p node) (js2-string-node-p node))
-            (insert "@")
-          (progn
-            (delete-char 0)
-            (insert "this.")))))
-
-    (bind-key "@" 'js2-insert-this js2-mode-map)
-
     (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 
-    (add-hook
-     'js2-mode-hook
-     (lambda ()
-       (tern-mode)
+    (add-hook 'js2-mode-hook #'tern-mode)
 
-       (prettify-symbols-mode -1)))
-       ;(push '("function" . ?ƒ) prettify-symbols-alist)
-       ;(push '("this." . ?@) prettify-symbols-alist)))
-
-    (setq js2-bounce-indent-p t
+    (setq js2-basic-offset 2
+          js2-bounce-indent-p t
           js2-strict-missing-semi-warning nil
           js2-concat-multiline-strings nil
           js2-include-node-externs t
           js2-skip-preprocessor-directives t
           js2-strict-inconsistent-return-warning nil)))
+
+;; JSX
+(use-package rjsx-mode
+  :mode "\\.jsx$")
 
 ;; Tern
 (use-package tern
@@ -85,10 +83,7 @@
             (setq coffee-tab-width 2)
             (add-hook 'coffee-mode-hook 'highlight-symbol-mode)))
 
-(use-package highlight-symbol
-  :init (setq
-         highlight-symbol-foreground-color nil
-         highlight-symbol-idle-delay 0.1))
+(use-package highlight-symbol)
 
 ;; TypeScript
 (use-package tide
@@ -110,12 +105,10 @@
             (load "/Users/katspaugh/.emacs.d/company-sass.el")
             (add-to-list 'company-backends 'company-sass)))
 
-
 ;; Flycheck
 (use-package flycheck
   :init (setq
          flycheck-coffeelintrc "coffeelint.json"
-         flycheck-eslintrc "eslint.json"
          flycheck-checkers
          '(coffee
            coffee-coffeelint
@@ -177,36 +170,12 @@
 
 (use-package helm-git-grep
   :bind ("C-x C-g" . helm-git-grep)
-  :config
-  (progn
-    (bind-key "C-x C-g" 'helm-git-grep-from-isearch isearch-mode-map)
-
-    (defvar helm-search-history nil "History of helm git-grep input")
-
-    (defun helm-git-grep-1 (&optional input)
-      "Execute helm git grep.
-Optional argument INPUT is initial input."
-      (helm :sources '(helm-source-git-grep
-                       helm-source-git-submodule-grep)
-            :buffer (if helm-git-grep-ignore-case "*helm git grep [i]*" "*helm git grep*")
-            :input input
-            :keymap helm-git-grep-map
-            :history 'helm-search-history ;; Separate history
-            :candidate-number-limit helm-git-grep-candidate-number-limit))))
-
-;; Which key
-(use-package which-key
-  ;:config (which-key-setup-side-window-right)
-  :config (which-key-setup-minibuffer)
-  :init (which-key-mode 1))
+  :config (bind-key "C-x C-g" 'helm-git-grep-from-isearch isearch-mode-map))
 
 ;; Ivy
 (use-package ivy
   :config (define-key ivy-minibuffer-map (kbd "C-w") 'ivy-yank-word)
   :init (ivy-mode 1))
-
-(use-package swiper
-  :bind (("C-c C-s" . swiper)))
 
 (use-package smex)
 
@@ -220,6 +189,9 @@ Optional argument INPUT is initial input."
   :config (progn
             (setq rainbow-html-colors nil)
             (add-hook 'css-mode-hook #'rainbow-mode)))
+
+(use-package editorconfig
+  :init (editorconfig-mode))
 
 
 ;;; packages.el ends here

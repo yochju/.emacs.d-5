@@ -31,11 +31,13 @@
 ;; y-or-no-p
 (defalias 'yes-or-no-p 'y-or-n-p)
 
-;; Set tabs to 4 spaces
-(setq-default indent-tabs-mode nil)
-(setq standard-indent 4)
-(setq tab-width 4)
-(setq sgml-basic-offset 2)
+;; Set tabs to 2 spaces
+(setq-default
+ indent-tabs-mode nil
+ js-indent-level 2
+ standard-indent 2
+ tab-width 2
+ sgml-basic-offset 2)
 
 ;; Electric
 (electric-indent-mode -1)
@@ -50,8 +52,9 @@
 ;; Highlight matching parentheses
 (show-paren-mode t)
 
-(setq-default left-fringe-width 18)
-(setq-default right-fringe-width 6)
+;; Fringes
+(setq-default left-fringe-width 18
+              right-fringe-width 6)
 
 ;; Display tabs and trailing spaces
 (global-whitespace-mode t)
@@ -62,9 +65,6 @@
 
 ;; Auto-revert buffer on file change
 (global-auto-revert-mode)
-
-;; Prettify programming languages syntax
-(global-prettify-symbols-mode)
 
 ;; Display column number
 (column-number-mode)
@@ -89,7 +89,7 @@
 (add-hook 'minibuffer-setup-hook 'my-minibuffer-setup)
 (defun my-minibuffer-setup ()
   (set (make-local-variable 'face-remapping-alist)
-       '((default :height 1.5 :foreground "white"))))
+       '((default :height 1.5 :foreground "white" :family "Menlo"))))
 
 ;; Load packages
 (run-with-idle-timer 0 nil #'load "~/.emacs.d/packages.el")

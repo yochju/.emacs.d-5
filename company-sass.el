@@ -10,6 +10,7 @@
 
 (require 'company)
 (require 'company-css)
+(require 'css-mode)
 (require 'cl-lib)
 
 ;;; values
@@ -32,7 +33,7 @@
                         (company-css-property-values
                          (company-grab company-sass-property-value-regexp 1))))
       ((company-grab-symbol)
-       (all-completions arg company-css-property-alist))))
+       (all-completions arg css-property-ids))))
     (sorted t)))
 
 (provide 'company-sass)
