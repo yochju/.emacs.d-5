@@ -23,10 +23,12 @@
 ;;   :init (load-theme 'atom-one-dark))
 
 (use-package diff-hl
+  :defer 1
   :init (global-diff-hl-mode t))
 
 ;; company-mode
 (use-package company
+  :defer 1
   :init (setq
          company-tooltip-align-annotations t
          company-tooltip-minimum-width 30)
@@ -35,28 +37,30 @@
 
 ;; Count matched lines
 (use-package anzu
+  :defer 1
   :init (global-anzu-mode))
 
 ;; Markdown
 (use-package markdown-mode
-  :ensure t
+  :defer 1
   :commands (markdown-mode gfm-mode)
   :mode (("README\\.md\\'" . gfm-mode)
          ("\\.md\\'" . markdown-mode)
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 
-(use-package js2-highlight-vars
-  :config (add-hook 'js2-mode-hook (lambda () (js2-highlight-vars-mode))))
-
 ;; js2-mode
 (use-package js2-mode
+  :defer 1
   :mode "\\.js$"
   :config
   (progn
     (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 
     (add-hook 'js2-mode-hook #'tern-mode)
+
+    ;; Don't indent multi-line declarations (var, let, const) in any special way.
+    (advice-add 'js--multi-line-declaration-indentation :around (lambda (orig-fun &rest args) nil))
 
     (setq js2-basic-offset 2
           js2-bounce-indent-p t
@@ -68,25 +72,31 @@
 
 ;; JSX
 (use-package rjsx-mode
+  :defer 1
   :mode "\\.jsx$")
 
 ;; Tern
 (use-package tern
+  :defer 1
   :init (autoload 'tern-mode "tern" nil t))
 
 (use-package company-tern
+  :defer 1
   :config (add-to-list 'company-backends 'company-tern))
 
 (use-package coffee-mode
+  :defer 1
   :config (progn
             (setq coffee-args-compile '("-c" "--bare" "--no-header"))
             (setq coffee-tab-width 2)
             (add-hook 'coffee-mode-hook 'highlight-symbol-mode)))
 
-(use-package highlight-symbol)
+(use-package highlight-symbol
+  :defer 1)
 
 ;; TypeScript
 (use-package tide
+  :defer 1
   :config (add-hook 'typescript-mode-hook
                     (lambda ()
                       (turn-off-auto-fill)
@@ -97,16 +107,19 @@
                       (company-mode-on))))
 
 ;; Yaml
-(use-package yaml-mode)
+(use-package yaml-mode
+  :defer 1)
 
 ;; Sass
 (use-package sass-mode
+  :defer 1
   :config (progn
             (load "/Users/katspaugh/.emacs.d/company-sass.el")
             (add-to-list 'company-backends 'company-sass)))
 
 ;; Flycheck
 (use-package flycheck
+  :defer 1
   :init (setq
          flycheck-coffeelintrc "coffeelint.json"
          flycheck-checkers
@@ -123,6 +136,7 @@
 
 ;; Flyspell
 (use-package flyspell
+  :defer 1
   :init (progn
           (add-hook 'text-mode-hook 'flyspell-mode)
           (add-hook 'markdown-mode-hook 'flyspell-mode)
@@ -154,6 +168,7 @@
 
 ;; Helm
 (use-package helm
+  :defer 2
   :config
   (progn
     (setq helm-display-header-line nil)
@@ -169,6 +184,7 @@
     (bind-key "C-M-i" 'helm-select-action helm-map)))
 
 (use-package helm-git-grep
+  :defer 2
   :bind ("C-x C-g" . helm-git-grep)
   :config (bind-key "C-x C-g" 'helm-git-grep-from-isearch isearch-mode-map))
 
@@ -186,10 +202,12 @@
 
 ;; CSS colors
 (use-package rainbow-mode
+  :defer 1
   :config (progn
             (setq rainbow-html-colors nil)
             (add-hook 'css-mode-hook #'rainbow-mode)))
 
+;; Editorconfig
 (use-package editorconfig
   :init (editorconfig-mode))
 

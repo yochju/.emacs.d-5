@@ -44,7 +44,7 @@
 (electric-pair-mode -1)
 
 ;; Save command history across sessions
-(savehist-mode)
+;(savehist-mode)
 
 ;; Don't blink cursor
 (blink-cursor-mode -1)
@@ -89,7 +89,7 @@
 (add-hook 'minibuffer-setup-hook 'my-minibuffer-setup)
 (defun my-minibuffer-setup ()
   (set (make-local-variable 'face-remapping-alist)
-       '((default :height 1.5 :foreground "white" :family "Menlo"))))
+       '((default :height 200 :foreground "white" :family "Menlo"))))
 
 ;; Load packages
 (run-with-idle-timer 0 nil #'load "~/.emacs.d/packages.el")
