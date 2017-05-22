@@ -16,11 +16,11 @@
 (use-package smart-mode-line
   :init (smart-mode-line-enable))
 
-(use-package planet-theme
-  :init (load-theme 'planet))
+;; (use-package planet-theme
+;;   :init (load-theme 'planet))
 
-;; (use-package atom-one-dark-theme
-;;   :init (load-theme 'atom-one-dark))
+(use-package atom-one-dark-theme
+  :init (load-theme 'atom-one-dark))
 
 (use-package diff-hl
   :defer 1
@@ -49,6 +49,52 @@
          ("\\.markdown\\'" . markdown-mode))
   :init (setq markdown-command "multimarkdown"))
 
+(defun setup-tide-mode ()
+  (interactive)
+  (tide-setup)
+  (tide-hl-identifier-mode +1))
+
+;; TypeScript
+(use-package tide
+  :defer 1
+  :config (add-hook 'typescript-mode-hook #'setup-tide-mode))
+
+;;
+;; Override the js-mode indentation function for multiline vars
+;;
+(defun js--multi-line-declaration-indentation ()
+  "Helper function for `js--proper-indentation'.
+Return the proper indentation of the current line if it belongs to a declaration
+statement spanning multiple lines; otherwise, return nil."
+  (let (at-opening-bracket)
+    (save-excursion
+      (back-to-indentation)
+      (when (not (looking-at js--declaration-keyword-re))
+        (when (looking-at js--indent-operator-re)
+          (goto-char (+ (- js-indent-level 1) (match-beginning 0))))
+        (while (and (not at-opening-bracket)
+                    (not (bobp))
+                    (let ((pos (point)))
+                      (save-excursion
+                        (js--backward-syntactic-ws)
+                        (or (eq (char-before) ?,)
+                            (and (not (eq (char-before) ?\;))
+                                 (prog2
+                                     (skip-syntax-backward ".")
+                                     (looking-at js--indent-operator-re)
+                                   (js--backward-syntactic-ws))
+                                 (not (eq (char-before) ?\;)))
+                            (js--same-line pos)))))
+          (condition-case nil
+              (backward-sexp)
+            (scan-error (setq at-opening-bracket t))))
+        (when (looking-at js--declaration-keyword-re)
+          (goto-char (+ (- js-indent-level 1) (match-beginning 0)))
+          (1+ (current-column)))))))
+
+(add-to-list 'auto-mode-alist '("\\.json\\'" . fundamental-mode))
+
+
 ;; js2-mode
 (use-package js2-mode
   :defer 1
@@ -57,10 +103,8 @@
   (progn
     (add-to-list 'interpreter-mode-alist '("node" . js2-mode))
 
-    (add-hook 'js2-mode-hook #'tern-mode)
-
-    ;; Don't indent multi-line declarations (var, let, const) in any special way.
-    (advice-add 'js--multi-line-declaration-indentation :around (lambda (orig-fun &rest args) nil))
+    (add-hook 'js2-mode-hook #'setup-tide-mode)
+    ;(add-hook 'js2-mode-hook #'tern-mode)
 
     (setq js2-basic-offset 2
           js2-bounce-indent-p t
@@ -71,61 +115,39 @@
           js2-strict-inconsistent-return-warning nil)))
 
 ;; JSX
-(use-package rjsx-mode
-  :defer 1
-  :mode "\\.jsx$")
+;; (use-package rjsx-mode
+;;   :defer 1
+;;   :mode "\\.jsx$")
+
+;; (use-package web-mode
+;;   :defer 1
+;;   :mode "\\.jsx$"
+;;   :config
+;;   (add-hook 'web-mode-hook
+;;             (lambda ()
+;;               (when (string-equal "jsx" (file-name-extension buffer-file-name))
+;;                 (setup-tide-mode)))))
 
 ;; Tern
 (use-package tern
   :defer 1
   :init (autoload 'tern-mode "tern" nil t))
 
-(use-package company-tern
-  :defer 1
-  :config (add-to-list 'company-backends 'company-tern))
-
-(use-package coffee-mode
-  :defer 1
-  :config (progn
-            (setq coffee-args-compile '("-c" "--bare" "--no-header"))
-            (setq coffee-tab-width 2)
-            (add-hook 'coffee-mode-hook 'highlight-symbol-mode)))
-
-(use-package highlight-symbol
-  :defer 1)
-
-;; TypeScript
-(use-package tide
-  :defer 1
-  :config (add-hook 'typescript-mode-hook
-                    (lambda ()
-                      (turn-off-auto-fill)
-                      (tide-setup)
-                      (flycheck-mode 1)
-                      (setq flycheck-check-syntax-automatically '(save mode-enabled))
-                      (eldoc-mode 1)
-                      (company-mode-on))))
+;; (use-package company-tern
+;;   :defer 1
+;;   :config (setq company-backends '(company-tern)))
 
 ;; Yaml
 (use-package yaml-mode
   :defer 1)
 
-;; Sass
-(use-package sass-mode
-  :defer 1
-  :config (progn
-            (load "/Users/katspaugh/.emacs.d/company-sass.el")
-            (add-to-list 'company-backends 'company-sass)))
-
 ;; Flycheck
 (use-package flycheck
   :defer 1
   :init (setq
-         flycheck-coffeelintrc "coffeelint.json"
          flycheck-checkers
-         '(coffee
-           coffee-coffeelint
-           typescript-tide
+         '(typescript-tide
+           javascript-tide
            css-csslint
            emacs-lisp
            haml
@@ -158,13 +180,32 @@
   :bind (("C-c C-p" . project-explorer-open))
   :config (progn
             (add-hook 'project-explorer-mode-hook (lambda ()
-                                                    (setq-local left-fringe-width 6)
-                                                    (setq-local right-fringe-width 6)))
+                                                    (setq-local left-fringe-width 4)
+                                                    (setq-local right-fringe-width 4)))
             (add-hook 'project-explorer-mode-hook 'hl-line-mode))
   :init (setq
          pe/follow-current t
          pe/omit-gitignore t
          pe/width 30))
+
+;; Ivy
+(use-package ivy
+  :config (define-key ivy-minibuffer-map (kbd "C-w") 'ivy-yank-word)
+  :init (ivy-mode 1))
+
+(use-package smex)
+
+(use-package counsel
+  :init (counsel-mode 1)
+  :bind (("C-x C-b" . ivy-switch-buffer)
+         ("C-x C-d" . counsel-git)))
+
+;; CSS colors
+(use-package rainbow-mode
+  :defer 1
+  :config (progn
+            (setq rainbow-html-colors nil)
+            (add-hook 'css-mode-hook #'rainbow-mode)))
 
 ;; Helm
 (use-package helm
@@ -187,29 +228,5 @@
   :defer 2
   :bind ("C-x C-g" . helm-git-grep)
   :config (bind-key "C-x C-g" 'helm-git-grep-from-isearch isearch-mode-map))
-
-;; Ivy
-(use-package ivy
-  :config (define-key ivy-minibuffer-map (kbd "C-w") 'ivy-yank-word)
-  :init (ivy-mode 1))
-
-(use-package smex)
-
-(use-package counsel
-  :init (counsel-mode 1)
-  :bind (("C-x C-b" . ivy-switch-buffer)
-         ("C-x C-d" . counsel-git)))
-
-;; CSS colors
-(use-package rainbow-mode
-  :defer 1
-  :config (progn
-            (setq rainbow-html-colors nil)
-            (add-hook 'css-mode-hook #'rainbow-mode)))
-
-;; Editorconfig
-(use-package editorconfig
-  :init (editorconfig-mode))
-
 
 ;;; packages.el ends here

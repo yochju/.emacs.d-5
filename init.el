@@ -1,10 +1,4 @@
-;; The toolbar is useless
-
-;; Added by Package.el.  This must come before configurations of
-;; installed packages.  Don't delete this line.  If you don't want it,
-;; just comment it out by adding a semicolon to the start of the line.
-;; You may delete these explanatory comments.
-(package-initialize)
+;(package-initialize)
 
 (tool-bar-mode -1)
 
@@ -23,6 +17,7 @@
       `((".*" . ,temporary-file-directory)))
 (setq auto-save-file-name-transforms
       `((".*" ,temporary-file-directory t)))
+(setq auto-save-default nil)
 
 ;; Set system PATH
 (setenv "PATH" (concat (getenv "PATH") ":/usr/local/bin"))
@@ -53,8 +48,8 @@
 (show-paren-mode t)
 
 ;; Fringes
-(setq-default left-fringe-width 18
-              right-fringe-width 6)
+(setq-default left-fringe-width 16
+              right-fringe-width 8)
 
 ;; Display tabs and trailing spaces
 (global-whitespace-mode t)
@@ -89,7 +84,7 @@
 (add-hook 'minibuffer-setup-hook 'my-minibuffer-setup)
 (defun my-minibuffer-setup ()
   (set (make-local-variable 'face-remapping-alist)
-       '((default :height 200 :foreground "white" :family "Menlo"))))
+       '((default :height 200 :family "San Francisco" :foreground "#FFFFFF"))))
 
 ;; Load packages
 (run-with-idle-timer 0 nil #'load "~/.emacs.d/packages.el")
