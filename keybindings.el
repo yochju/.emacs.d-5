@@ -51,3 +51,6 @@ With argument ARG, do this that many times."
   (delete-region (point) (progn (backward-word arg) (point))))
 
 (bind-key "M-<backspace>" 'backward-delete-word minibuffer-local-map)
+
+(global-unset-key (kbd "M-<down-mouse-1>"))
+(global-set-key (kbd "M-<mouse-1>") 'mc/add-cursor-on-click)

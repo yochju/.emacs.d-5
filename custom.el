@@ -8,12 +8,12 @@
  '(company-backends
    (quote
     (company-tide company-nxml company-css company-capf company-files)))
+ '(counsel-find-file-ignore-regexp "\\`\\.")
  '(css-indent-offset 2)
  '(cursor-type (quote (bar . 2)))
- '(custom-enabled-themes (quote (atom-dark-one-theme)))
  '(custom-safe-themes
    (quote
-    ("a56a6bf2ecb2ce4fa79ba636d0a5cf81ad9320a988ec4e55441a16d66b0c10e0" "08b8807d23c290c840bbb14614a83878529359eaba1805618b3be7d61b0b0a32" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default)))
+    ("a4c9e536d86666d4494ef7f43c84807162d9bd29b0dfd39bdf2c3d845dcc7b2e" "08b8807d23c290c840bbb14614a83878529359eaba1805618b3be7d61b0b0a32" "c74e83f8aa4c78a121b52146eadb792c9facc5b1f02c917e3dbb454fca931223" default)))
  '(dabbrev-case-distinction nil)
  '(dabbrev-case-replace nil)
  '(desktop-buffers-not-to-save ".")
@@ -32,6 +32,7 @@
  '(ivy-count-format "")
  '(ivy-fixed-height-minibuffer t)
  '(ivy-height 10)
+ '(ivy-mode t)
  '(ivy-use-virtual-buffers t)
  '(ivy-wrap t)
  '(js-switch-indent-offset 4)
@@ -42,10 +43,10 @@
  '(ns-right-alternate-modifier (quote none))
  '(package-selected-packages
    (quote
-    (fundamental-mode js2-refactor wgrep tj-mode web-mode ag yaml-mode which-key use-package tide smex smart-mode-line-powerline-theme sass-mode rjsx-mode rainbow-mode project-explorer planet-theme markdown-mode js2-highlight-vars highlight-symbol helm-git-grep helm flycheck-title editorconfig diff-hl counsel company-tern coffee-mode atom-one-dark-theme anzu)))
- '(pe/omit-gitignore t)
+    (plan9-theme flx mark-multiple helpful atom-dark-theme smart-mode-line ivy tern js2-mode company powerline spaceline-all-the-icons powerline-evil spaceline all-the-icons fundamental-mode js2-refactor wgrep tj-mode web-mode ag yaml-mode which-key use-package tide smex smart-mode-line-powerline-theme sass-mode rjsx-mode rainbow-mode project-explorer planet-theme markdown-mode js2-highlight-vars highlight-symbol helm-git-grep helm flycheck-title editorconfig diff-hl counsel company-tern coffee-mode atom-one-dark-theme anzu)))
+ '(pe/omit-gitignore t t)
  '(pe/side (quote left))
- '(pe/width 35)
+ '(pe/width 35 t)
  '(recentf-menu-filter (quote recentf-arrange-by-dir))
  '(safe-local-variable-values (quote ((sgml-basic-offset . 2) (standard-indent . 2))))
  '(scroll-margin 3)
