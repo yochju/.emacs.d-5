@@ -24,8 +24,9 @@
  '(flycheck-check-syntax-automatically (quote (save mode-enabled)))
  '(flycheck-checkers
    (quote
-    (tsx-tide typescript-tide javascript-tide emacs-lisp haml javascript-eslint json-jsonlint yaml-jsyaml jsx-tide scss-stylelint css-stylelint)))
- '(flycheck-idle-change-delay 5.0)
+    (typescript-tide javascript-tide jsx-tide css-csslint emacs-lisp haml javascript-eslint json-jsonlint yaml-jsyaml)))
+ '(flycheck-eslint-rules-directories nil)
+ '(flycheck-idle-change-delay 10.0)
  '(highlight-symbol-foreground-color nil)
  '(highlight-symbol-idle-delay 0.1)
  '(inhibit-startup-screen t)
@@ -44,9 +45,9 @@
  '(package-selected-packages
    (quote
     (plan9-theme flx mark-multiple helpful atom-dark-theme smart-mode-line ivy tern js2-mode company powerline spaceline-all-the-icons powerline-evil spaceline all-the-icons fundamental-mode js2-refactor wgrep tj-mode web-mode ag yaml-mode which-key use-package tide smex smart-mode-line-powerline-theme sass-mode rjsx-mode rainbow-mode project-explorer planet-theme markdown-mode js2-highlight-vars highlight-symbol helm-git-grep helm flycheck-title editorconfig diff-hl counsel company-tern coffee-mode atom-one-dark-theme anzu)))
- '(pe/omit-gitignore t t)
+ '(pe/omit-gitignore t)
  '(pe/side (quote left))
- '(pe/width 35 t)
+ '(pe/width 35)
  '(recentf-menu-filter (quote recentf-arrange-by-dir))
  '(safe-local-variable-values (quote ((sgml-basic-offset . 2) (standard-indent . 2))))
  '(scroll-margin 3)

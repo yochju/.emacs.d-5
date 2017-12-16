@@ -152,10 +152,10 @@ statement spanning multiple lines; otherwise, return nil."
          '(typescript-tide
            javascript-tide
            jsx-tide
+           javascript-eslint
            css-csslint
            emacs-lisp
            haml
-           javascript-eslint
            json-jsonlint
            yaml-jsyaml))
   :config (global-flycheck-mode))

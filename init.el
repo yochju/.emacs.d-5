@@ -94,3 +94,4 @@
 
 ;; Start the Emacs server
 (run-with-idle-timer 1 nil #'server-start)
+(add-hook 'server-switch-hook #'raise-frame)
